@@ -15,7 +15,7 @@ api_urls = router.urls + [
 
 
 urlpatterns = [
-    url(r'^/$', views.index.as_view(), name='index'),
+    url(r'^/?$', views.index.as_view(), name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api_urls, namespace='api')),
 ]

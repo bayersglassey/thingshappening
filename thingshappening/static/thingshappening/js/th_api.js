@@ -25,17 +25,21 @@ th_api.request = function(method, url, data){
     });
 }
 
-
-th_api.get_users = function(){
-    return th_api.request("GET", th_api.USERS_URL);
+th_api.make_resource = function(url){
+    return {
+        get_all: function(){
+            return th_api.request("GET", url);
+        },
+        get: function(id){
+            return th_api.request("GET", url + "/" + id);
+        },
+        post: function(data){
+            return th_api.request("POST", url, data);
+        }
+    }
 }
 
-th_api.get_user = function(id){
-    return th_api.request("GET", th_api.USERS_URL + "/" + id);
-}
-
-th_api.post_user = function(data){
-    return th_api.request("POST", th_api.USERS_URL, data);
-}
+th_api.users = th_api.make_resource(th_api.USERS_URL);
+th_api.events = th_api.make_resource(th_api.EVENTS_URL);
 
 })();

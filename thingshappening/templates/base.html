@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>ThingsHappening{% block title %}{% endblock %}</title>
+{% block css %}
+{% endblock %}
+{% block js %}
+<script src="{% static "thingshappening/js/th_api.js" %}"></script>
+{% endblock %}
+</head>
+<body>
+{% block main %}
+{% endblock %}
+</body>
+</html>

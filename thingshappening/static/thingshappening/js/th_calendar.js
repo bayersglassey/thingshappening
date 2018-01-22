@@ -6,7 +6,7 @@ window.th_calendar = (function($){
         /* E.g. for Jan 2018, year = 2018; month = 0 */
         var d = moment([year, month]);
         var n_dates = d.daysInMonth();
-        var date_offset = (d.day() - 1) % 7;
+        var date_offset = (d.day() + 7 - 1) % 7;
 
         var n_tds_required = n_dates + date_offset;
 

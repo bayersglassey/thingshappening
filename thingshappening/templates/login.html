@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+        <p class="alert alert-danger">{{ error }}</p>
+    {% endfor %}
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+        <p class="alert alert-danger">Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+    {% else %}
+        <p class="alert alert-danger">Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+<h2>Log in to your account</h2>
+<p>Don't have an account yet? Create one <a href="{% url "account:signup" %}"><strong>here</strong></a>.</p>
+<hr>
+
+<form method="post" action="{% url 'account:login' %}">
+{% csrf_token %}
+<p>
+<label>
+    {{ form.username.label_tag }}
+    {{ form.username }}
+    {% if form.errors.username %}
+        <span class="text-danger">{{ form.errors.username.as_text }}</span>
+    {% endif %}
+</label>
+</p>
+<p>
+<label>
+    {{ form.password.label_tag }}
+    {{ form.password }}
+    {% if form.errors.password %}
+        <span class="text-danger">{{ form.errors.password.as_text }}</span>
+    {% endif %}
+</label>
+</p>
+
+<input type="submit" value="login" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}

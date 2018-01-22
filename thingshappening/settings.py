@@ -28,6 +28,9 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'thingshappening.thuser'
 
+LOGIN_URL = 'account:login'
+LOGIN_REDIRECT_URL = '/'
+
 
 # Application definition
 
@@ -40,9 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'thingshappening',
     'rest_framework',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

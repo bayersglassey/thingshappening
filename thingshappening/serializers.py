@@ -25,9 +25,9 @@ class EventSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'description',
-            'host',
+            'user_id',
+            'start',
+            'end',
         )
-
-    host = serializers.PrimaryKeyRelatedField(read_only=True)
 
 

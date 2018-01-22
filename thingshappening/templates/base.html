@@ -1,16 +1,48 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
-<head>
-<title>ThingsHappening{% block title %}{% endblock %}</title>
-{% block css %}
-{% endblock %}
-{% block js %}
-<script src="{% static "thingshappening/js/th_api.js" %}"></script>
-{% endblock %}
-</head>
-<body>
-{% block main %}
-{% endblock %}
-</body>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ThingsHappening{% block title %}{% endblock %}</title>
+        <link rel="shortcut icon" href="{% static "thingshappening/img/favicon.png" %}">
+        {% block css %}
+            <link rel="stylesheet" href="{% static "bootstrap-3.3.7-dist/css/bootstrap.min.css" %}">
+            <link rel="stylesheet" href="{% static "thingshappening/css/th_main.css" %}">
+            <link rel="stylesheet" href="{% static "thingshappening/css/th_calendar.css" %}">
+        {% endblock %}
+    </head>
+    <body>
+        <nav id="nav-main" class="navbar navbar-default">
+            <div class="container">
+                <row>
+                    <div class="navbar-header">
+                        <h1 id="navbar-title">ThingsHappening.</h1>
+                        <p>Things are happening! You should know about them. You might even want to join in.</p>
+                        <p>Are you going to cause a thing to happen? Maybe you should list it here.</p>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div id="main-panel" class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="main">
+                            {% block main %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% block js %}
+            <script src="{% static "thingshappening/js/jquery-3.3.1.min.js" %}"></script>
+            <script src="{% static "thingshappening/js/moment-with-locales.min.js" %}"></script>
+            <script src="{% static "bootstrap-3.3.7-dist/js/bootstrap.min.js" %}"></script>
+            <script src="{% static "thingshappening/js/th_api.js" %}"></script>
+            <script src="{% static "thingshappening/js/th_calendar.js" %}"></script>
+        {% endblock %}
+    </body>
 </html>

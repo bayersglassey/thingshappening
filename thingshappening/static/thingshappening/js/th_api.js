@@ -1,8 +1,7 @@
 
 
-(function(){
-
-var th_api = window.th_api = {};
+window.th_api = (function(){
+var th_api = {};
 
 th_api.BASE_URL = "/api";
 th_api.USERS_URL = "/users";
@@ -42,4 +41,5 @@ th_api.make_resource = function(url){
 th_api.users = th_api.make_resource(th_api.USERS_URL);
 th_api.events = th_api.make_resource(th_api.EVENTS_URL);
 
+return th_api;
 })();

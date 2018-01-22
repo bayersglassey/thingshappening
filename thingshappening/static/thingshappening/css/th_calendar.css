@@ -1,0 +1,36 @@
+
+table.calendar {
+}
+
+table.calendar thead {
+    border: 1px solid #ccc;
+}
+
+table.calendar th {
+    text-align: center;
+}
+
+table.calendar td {
+    position: relative;
+    width: 3em;
+    height: 3em;
+}
+
+table.calendar td.zebra1 {
+    background: #eee;
+}
+
+table.calendar td.zebra2 {
+}
+
+.calendar-daynumber {
+    /* float: right; */
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+#main {
+    max-height: 20em;
+    overflow-y: auto;
+}

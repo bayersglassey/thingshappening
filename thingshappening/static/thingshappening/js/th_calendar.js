@@ -29,7 +29,6 @@ window.th_calendar = (function($){
 
         /* Create the table */
         var elem_table = document.createElement('table');
-        //elem_table.setAttribute('class', 'calendar table table-bordered');
         elem_table.setAttribute('class', 'calendar');
 
         /* Create the <table>'s <thead> and <tbody> */
@@ -68,13 +67,14 @@ window.th_calendar = (function($){
         for(var i = 0; i < n_rows; i++){
             var elem_tr = document.createElement('tr');
             for(var j = 0; j < n_cols; j++){
+                var k = i * n_cols + j;
+
                 /* Create <td> representing datecell */
                 var elem_td = document.createElement('td');
-                elem_td.setAttribute('class', k % 2 == 0? 'zebra1': 'zebra2');
+                elem_td.setAttribute('class', 'zebra' + String(k % 2));
                 elem_tr.append(elem_td);
 
                 /* Create datecell */
-                var k = i * n_cols + j;
                 var datecell = datecells[k] = {
                     td: elem_td,
                     events: []
@@ -140,44 +140,6 @@ window.th_calendar = (function($){
         }
 
     }
-
-    $(document).ready(function(){
-
-        /* For testing only! */
-
-        var jan_events = [
-            {
-                "id": 1,
-                "title": "Going to the Park",
-                "description": "Join us! We're all going to the park today.",
-                "user_id": 1,
-                "start": "2018-01-22T17:42:04.337652Z",
-                "end": "2018-01-22T17:41:42.044126Z"
-            },
-            {
-                "id": 29,
-                "title": "Professional Blag",
-                "description": "Test event",
-                "user_id": 29,
-                "start": "2020-01-08T18:15:00Z",
-                "end": "2020-01-10T12:00:00Z"
-            },
-            {
-                "id": 30,
-                "title": "Cooking Party",
-                "description": "Test event",
-                "user_id": 53,
-                "start": "2019-01-04T05:45:00Z",
-                "end": "2020-01-21T09:00:00Z"
-            }
-        ];
-        var jan = new CalendarMonth(2018, 0);
-        var feb = new CalendarMonth(2018, 1);
-        jan.add_events(jan_events);
-        $("#main").append(jan.elem_table);
-        $("#main").append(feb.elem_table);
-    });
-
 
     return th_calendar;
 })(jQuery);

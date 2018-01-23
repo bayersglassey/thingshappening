@@ -1,27 +1,35 @@
 
-table.calendar {
+.calendar {
+    display: inline-block;
+    vertical-align: top;
+    margin: 5px;
 }
 
-table.calendar thead {
+.calendar thead {
     border: 1px solid #ccc;
 }
 
-table.calendar th {
+.calendar th {
     text-align: center;
 }
 
-table.calendar td {
+.calendar td {
     position: relative;
     width: 3em;
     height: 3em;
     text-align: center;
 }
 
-table.calendar td.zebra1 {
+.calendar td.zebra0 {
+    background: #fff;
+}
+
+.calendar td.zebra1 {
     background: #eee;
 }
 
-table.calendar td.zebra2 {
+.calendar td.zebra2 {
+    background: #ddd;
 }
 
 .calendar-daynumber {

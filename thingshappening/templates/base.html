@@ -27,14 +27,8 @@
         </nav>
         <div class="container">
             <div class="row">
-                <div id="main-panel" class="panel panel-default">
-                    <div class="panel-body">
-                        <div id="main">
-                            {% block main %}
-                            {% endblock %}
-                        </div>
-                    </div>
-                </div>
+                {% block main %}
+                {% endblock %}
             </div>
         </div>
         {% block js %}

@@ -7,3 +7,19 @@
 .tvguide-event {
     background: #c15;
 }
+
+.tvguide-simpleview {
+    position: relative;
+}
+
+.tvguide-simpleview-row {
+    position: absolute;
+}
+
+.tvguide-simpleview-event {
+    position: absolute;
+    background: #5c1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+

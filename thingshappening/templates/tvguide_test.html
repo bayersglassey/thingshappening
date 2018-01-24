@@ -7,10 +7,12 @@
     $(document).ready(function(){
         /* For testing only! */
 
-        var view = document.getElementById('tvguide-view');
+        var main = document.getElementById('main');
 
         var tvguide = new TVGuide();
-        view.append(tvguide.elem);
+        tvguide.add_random_events(40);
+        var view = tvguide.get_simple_view();
+        main.append(view.render());
 
     });
 </script>
@@ -19,7 +21,7 @@
 {% block main %}
     <div class="panel panel-default">
         <div class="panel-body">
-            <div id="tvguide-view">
+            <div id="main">
             </div>
         </div>
     </div>

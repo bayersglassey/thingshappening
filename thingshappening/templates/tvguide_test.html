@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block js %}
+{{ block.super }}
+<script>
+    var TVGuide = window.TVGuide;
+    $(document).ready(function(){
+        /* For testing only! */
+
+        var view = document.getElementById('tvguide-view');
+
+        var tvguide = new TVGuide();
+        view.append(tvguide.elem);
+
+    });
+</script>
+{% endblock %}
+
+{% block main %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div id="tvguide-view">
+            </div>
+        </div>
+    </div>
+{% endblock %}

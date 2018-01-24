@@ -11,6 +11,7 @@
             <link rel="stylesheet" href="{% static "bootstrap-3.3.7-dist/css/bootstrap.min.css" %}">
             <link rel="stylesheet" href="{% static "thingshappening/css/th_main.css" %}">
             <link rel="stylesheet" href="{% static "thingshappening/css/th_calendar.css" %}">
+            <link rel="stylesheet" href="{% static "thingshappening/css/tvguide.css" %}">
         {% endblock %}
     </head>
     <body>
@@ -21,6 +22,11 @@
                         <h1 id="navbar-title">ThingsHappening.</h1>
                         <p>Things are happening! You should know about them. You might even want to join in.</p>
                         <p>Are you going to cause a thing to happen? Maybe you should list it here.</p>
+                        <ul>
+                            <li>Test the <a href="{% url "calendar_test" %}">calendar widget</a>.</li>
+                            <li>Test the <a href="{% url "tvguide_test" %}">TV guide widget</a>.</li>
+                            <li>Go <a href="{% url "index" %}">home</a>.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -37,6 +43,7 @@
             <script src="{% static "bootstrap-3.3.7-dist/js/bootstrap.min.js" %}"></script>
             <script src="{% static "thingshappening/js/th_api.js" %}"></script>
             <script src="{% static "thingshappening/js/th_calendar.js" %}"></script>
+            <script src="{% static "thingshappening/js/tvguide.js" %}"></script>
         {% endblock %}
     </body>
 </html>

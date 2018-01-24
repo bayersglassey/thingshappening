@@ -3,64 +3,13 @@
 {% block js %}
 {{ block.super }}
 <script>
-    var CalendarMonth = window.th_calendar.CalendarMonth;
-    $(document).ready(function(){
-
-        /* For testing only! */
-
-        var jan_events = [
-            {
-                "id": 1,
-                "title": "Going to the Park",
-                "description": "Join us! We're all going to the park today.",
-                "user_id": 1,
-                "start": "2018-01-22T17:42:04.337652Z",
-                "end": "2018-01-22T17:41:42.044126Z"
-            },
-            {
-                "id": 29,
-                "title": "Professional Blag",
-                "description": "Test event",
-                "user_id": 29,
-                "start": "2020-01-08T18:15:00Z",
-                "end": "2020-01-10T12:00:00Z"
-            },
-            {
-                "id": 30,
-                "title": "Cooking Party",
-                "description": "Test event",
-                "user_id": 53,
-                "start": "2019-01-04T05:45:00Z",
-                "end": "2020-01-21T09:00:00Z"
-            }
-        ];
-
-        var year_view = document.getElementById('year-view');
-        var months = [];
-        for(var i = 0; i < 12; i++){
-            var month = new CalendarMonth(2018, i);
-            months.push(month);
-            year_view.append(month.elem_table);
-        }
-        var jan = months[0];
-        jan.add_events(jan_events);
-
-        var tv_guide_view = document.getElementById('tv-guide-view');
-    });
 </script>
 {% endblock %}
 
 {% block main %}
     <div class="panel panel-default">
         <div class="panel-body">
-            <div id="year-view" style="white-space: nowrap; max-height: 20em; overflow-x: scroll; overflow-y: hidden;">
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div id="tv-guide-view" style="white-space: nowrap; overflow-x: scroll;">
-            </div>
+            <p>...</p>
         </div>
     </div>
 {% endblock %}

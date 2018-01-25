@@ -168,11 +168,19 @@ def create_random_users(n=1):
         users.append(user)
     return users
 
-def create_random_events(n=1, range_start=None, range_end=None):
+def create_random_events(n=1, range_start=None, range_end=None, user=None):
     events = []
-    users = THUser.objects.all()
+
+    # If you don't pass a user to this function, it will choose a random
+    # one for each event.
+    # If you do pass a user, it will be used for all events.
+    users = None
+    if user is None:
+        users = THUser.objects.all()
+
     for i in range(n):
-        user = pick_one(users)
+        if users is not None:
+            user = pick_one(users)
         start, end = random_range(range_start, range_end)
         event = Event.objects.create(
             user=user,

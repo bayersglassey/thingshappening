@@ -1,20 +1,5 @@
 
-/*
-    TODO:
-
-    TVGuide.cols should not be a circular buffer.
-    It should just be an array.
-    this.d is a moment representing col 0.
-    NOTE: When we say col i, we mean "logical" col i:
-        this.cols[i - this.col_offset]
-
-    We need TVGuide.rows, too.
-    In fact, do we need an array of cols at all?..
-*/
-
-
-
-window.TVGuide = (function($){
+window.TVGuide = (function(){
     function randInt(min, max){
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -260,4 +245,4 @@ window.TVGuide = (function($){
     };
 
     return TVGuide;
-})(jQuery);
+})();

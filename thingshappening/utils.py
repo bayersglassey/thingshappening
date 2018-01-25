@@ -144,14 +144,26 @@ def random_range(range_start=None, range_end=None):
 def create_random_users(n=1):
     users = []
     for i in range(n):
-        while True:
-            username = "anon-{}".format(random_chars(10))
-            if not THUser.objects.filter(username=username).exists():
-                break
+        first_name = random_first_name()
+        last_name = random_last_name()
+
+        username = username0 = "{}{}".format(
+            first_name[0], last_name.replace(' ', '')).lower()
+        while THUser.objects.filter(username=username).exists():
+            username = "{}-{}".format(username0, random_chars(10))
+
+        suffix = "@example.com"
+        email = email0 = "{}.{}".format(
+            first_name[0], last_name.replace(' ', '.')).lower()
+        while THUser.objects.filter(email=email+suffix).exists():
+            email = "{}.{}".format(email0, random_chars(5))
+        email += suffix
+
         user = THUser.objects.create(
-            first_name=random_first_name(),
-            last_name=random_last_name(),
+            first_name=first_name,
+            last_name=last_name,
             username=username,
+            email=email,
         )
         users.append(user)
     return users

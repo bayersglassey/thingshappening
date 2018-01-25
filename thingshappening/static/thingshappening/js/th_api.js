@@ -7,8 +7,23 @@ th_api.BASE_URL = "/api";
 th_api.USERS_URL = "/users";
 th_api.EVENTS_URL = "/events";
 
-th_api.request = function(method, url, data){
-    var full_url = th_api.BASE_URL + url;
+th_api.get_full_url = function(url, params){
+    var full_url = url;
+    var separator = "?";
+    if(params){
+        for(var param_name in params){
+            if(params.hasOwnProperty(param_name)){
+                var param_value = params[param_name];
+                full_url += separator + param_name + "=" + param_value;
+                separator = "&";
+            }
+        }
+    }
+    return full_url;
+}
+
+th_api.request = function(method, url, params, data){
+    var full_url = th_api.get_full_url(th_api.BASE_URL + url, params);
     var headers = new Headers();
     var options = {};
     if(data !== undefined){
@@ -24,16 +39,17 @@ th_api.request = function(method, url, data){
     });
 }
 
-th_api.make_resource = function(url){
+th_api.make_resource = function(url, query_params){
     return {
-        get_all: function(){
-            return th_api.request("GET", url);
+        get_all: function(params){
+            var full_url = th_api.get_full_url(url, params);
+            return th_api.request("GET", url, params);
         },
-        get: function(id){
-            return th_api.request("GET", url + "/" + id);
+        get: function(id, params){
+            return th_api.request("GET", url + "/" + id, params);
         },
-        post: function(data){
-            return th_api.request("POST", url, data);
+        post: function(params, data){
+            return th_api.request("POST", full_url, params, data);
         }
     }
 }

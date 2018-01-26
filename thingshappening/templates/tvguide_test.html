@@ -14,6 +14,7 @@
         /* The TVGuide and events data */
         var tvguide = new TVGuide();
         var view = tvguide.get_simple_view();
+        var view_elem = null;
         create_random_events(50);
 
 
@@ -30,9 +31,18 @@
             tvguide.clear();
             render();
         }
+        function crop_events(){
+            var x = view_elem.scrollLeft;
+            var w = view_elem.clientWidth;
+            var x_time = view.get_x_time(x);
+            var w_ms = view.get_w_ms(w);
+            tvguide.crop(x_time, w_ms);
+            render();
+        }
         function render(){
-            main.textContent = "";
-            main.append(view.render());
+            if(view_elem)view_elem.remove();
+            view_elem = view.render();
+            main.append(view_elem);
         }
 
 
@@ -42,6 +52,9 @@
 
         clear_btn.onclick = function(event){
             clear_events();
+        }
+        crop_btn.onclick = function(event){
+            crop_events();
         }
         generate_20_btn.onclick = function(event){
             create_random_events(20);
@@ -64,6 +77,8 @@
             </div>
             <div>
                 <button id="clear_btn">Clear events</button>
+                <br>
+                <button id="crop_btn">Crop events</button>
                 <br>
                 <button id="generate_20_btn">Generate 20 new events</button>
             </div>

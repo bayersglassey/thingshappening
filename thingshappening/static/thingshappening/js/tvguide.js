@@ -69,8 +69,6 @@ window.TVGuide = (function(){
     };
 
     function Row(){
-        /* ... */
-
         /* Array of events */
         this.events = [];
     }
@@ -80,6 +78,21 @@ window.TVGuide = (function(){
         },
         add_event: function(new_event){
             this.events.push(new_event);
+        },
+        crop: function(start, duration){
+            var end = start + duration;
+
+            var events = this.events;
+            var n_events = events.length;
+            for(var i = n_events - 1; i >= 0; i--){
+                var event = events[i];
+                if(event.end.isBefore(start) || event.start.isAfter(end)){
+                    this.remove_event(i);
+                }
+            }
+        },
+        remove_event: function(i){
+            this.events.splice(i, 1);
         }
     };
 
@@ -95,6 +108,15 @@ window.TVGuide = (function(){
     TVGuide.prototype = {
         clear: function(){
             this.rows.length = 0;
+            this.events = {};
+        },
+        crop: function(start, duration){
+            var rows = this.rows;
+            var n_rows = rows.length;
+            for(var i = 0; i < n_rows; i++){
+                var row = rows[i];
+                row.crop(start, duration);
+            }
         },
         add_events: function(data){
             var n_events = data.length;
@@ -117,7 +139,7 @@ window.TVGuide = (function(){
                 var end = moment(data.end);
                 var move_event =
                     start.diff(event.start) || end.diff(event.diff);
-                console.log("move_event", move_event);
+                console.log("move_event", move_event, event, data);
 
                 if(move_event){
                     /* Simple move strategy: first remove it, then put it back
@@ -194,6 +216,12 @@ window.TVGuide = (function(){
         this.row_h = row_h || 20;
     }
     SimpleView.prototype = {
+        get_x_time: function(x){
+            return moment(this.start + x / this.ms_w);
+        },
+        get_w_ms: function(w){
+            return w / this.ms_w;
+        },
         render: function(){
             /* Creates & returns a <div> representing the view.
             Maybe todo: instead use a this.elem, and have this.update() which
@@ -228,11 +256,12 @@ window.TVGuide = (function(){
             view_container_elem.append(datemarker);
 
             /* Update datemarker position & text when mouse moves */
+            var view = this;
             view_container_elem.onmousemove = function(event){
                 var view_rect = view_elem.getBoundingClientRect();
                 var x = event.clientX - view_rect.x;
                 datemarker.style.left = as_px(x);
-                datemarker.textContent = moment(start + x / ms_w);
+                datemarker.textContent = view.get_x_time(x);
             }
 
             /* Loop over all rows */

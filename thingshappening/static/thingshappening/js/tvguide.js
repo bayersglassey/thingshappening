@@ -222,38 +222,34 @@ window.TVGuide = (function(){
         get_w_ms: function(w){
             return w / this.ms_w;
         },
+        crop: function(){
+            var view_container_elem = this.view_container_elem;
+            var x = view_container_elem.scrollLeft;
+            var w = view_container_elem.clientWidth;
+            var x_time = this.get_x_time(x);
+            var w_ms = this.get_w_ms(w);
+            this.tvguide.crop(x_time, w_ms);
+        },
         render: function(){
-            /* Creates & returns a <div> representing the view.
-            Maybe todo: instead use a this.elem, and have this.update() which
-            updates it?.. */
+            /* Creates & returns a DOM element representing the view. */
 
-            /* Pull some values of 'this' into variables */
-            var tvguide = this.tvguide;
-            var start = this.start;
-            var row_h = this.row_h;
-            var ms_w = this.ms_w;
-
-            var start_ms = +start;
-
-            var rows = tvguide.rows;
-            var n_rows = rows.length;
-
-            /* Create elements for view */
+            /* Create toplevel element for this widget */
             var view_container_elem = document.createElement('div');
-            view_container_elem.setAttribute('class', 'tvguide-simpleview-container');
+            view_container_elem.setAttribute('class',
+                'tvguide-simpleview-container');
+
+            /* Create inner element */
             var view_elem = document.createElement('div');
             view_elem.setAttribute('class', 'tvguide-simpleview');
-            view_elem.style.height = as_px(n_rows * row_h);
-            view_elem.style.top = as_px(row_h);
             view_container_elem.append(view_elem);
 
             /* Create datemarker element */
             var datemarker = document.createElement('span');
-            datemarker.setAttribute('class', 'tvguide-simpleview-datemarker');
-            datemarker.style.height = as_px(row_h);
+            datemarker.setAttribute('class',
+                'tvguide-simpleview-datemarker');
             datemarker.style.position = 'absolute';
             datemarker.style.top = 0;
-            view_container_elem.append(datemarker);
+            view_elem.append(datemarker);
 
             /* Update datemarker position & text when mouse moves */
             var view = this;
@@ -264,14 +260,46 @@ window.TVGuide = (function(){
                 datemarker.textContent = view.get_x_time(x);
             }
 
-            /* Loop over all rows */
+            /* Store elements */
+            this.view_container_elem = view_container_elem;
+            this.view_elem = view_elem;
+            this.datemarker = datemarker;
+
+            /* Return toplevel element */
+            return view_container_elem;
+        },
+        update: function(){
+            /* Re-renders data */
+
+            /* Pull some values of 'this' into variables */
+            var view_container_elem = this.view_container_elem;
+            var view_elem = this.view_elem;
+            var datemarker = this.datemarker;
+            var tvguide = this.tvguide;
+            var start = this.start;
+            var row_h = this.row_h;
+            var ms_w = this.ms_w;
+
+            var start_ms = +start;
+
+            var rows = tvguide.rows;
+            var n_rows = rows.length;
+
+            /* Update element heights */
+            view_elem.style.height = as_px((n_rows + 1) * row_h);
+            datemarker.style.height = as_px(row_h);
+
+            /* Clear previously rendered events */
+            view_elem.textContent = "";
+
+            /* Loop over all rows, rendering their events */
             for(var i = 0; i < n_rows; i++){
                 var row = rows[i];
 
                 /* Create element for row */
                 var row_elem = document.createElement('div');
                 row_elem.setAttribute('class', 'tvguide-simpleview-row');
-                row_elem.style.top = as_px(i * row_h);
+                row_elem.style.top = as_px((i + 1) * row_h);
                 row_elem.style.height = as_px(row_h);
                 view_elem.append(row_elem);
 
@@ -298,9 +326,6 @@ window.TVGuide = (function(){
                     row_elem.append(event_elem);
                 }
             }
-
-            /* Return element representing view */
-            return view_container_elem;
         }
     };
 

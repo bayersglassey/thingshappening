@@ -14,8 +14,9 @@
         /* The TVGuide and events data */
         var tvguide = new TVGuide();
         var view = tvguide.get_simple_view();
-        var view_elem = null;
+        var view_elem = view.render();
         create_random_events(50);
+        main.append(view_elem);
 
 
         /********************
@@ -25,24 +26,15 @@
         function create_random_events(n){
             var events_data = TVGuide.Event.random_events_data(40);
             tvguide.add_events(events_data);
-            render();
+            view.update();
         }
         function clear_events(){
             tvguide.clear();
-            render();
+            view.update();
         }
         function crop_events(){
-            var x = view_elem.scrollLeft;
-            var w = view_elem.clientWidth;
-            var x_time = view.get_x_time(x);
-            var w_ms = view.get_w_ms(w);
-            tvguide.crop(x_time, w_ms);
-            render();
-        }
-        function render(){
-            if(view_elem)view_elem.remove();
-            view_elem = view.render();
-            main.append(view_elem);
+            view.crop();
+            view.update();
         }
 
 

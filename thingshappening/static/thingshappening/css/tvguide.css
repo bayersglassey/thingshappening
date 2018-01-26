@@ -8,6 +8,8 @@
 
 .tvguide-simpleview {
     position: relative;
+    width: 160em;
+    overflow: hidden;
 }
 
 .tvguide-simpleview-row {

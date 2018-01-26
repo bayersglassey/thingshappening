@@ -17,6 +17,40 @@ window.TVGuide = (function(){
         */
         this.update(data);
     }
+    Event.random_events_data = function(n, min_start, max_start, min_w, max_w){
+        /* Create random event data for testing.
+        The data is suitable for use with TVGuide.add_events(). */
+
+        n = n | 1;
+        min_start = min_start || +moment();
+        max_start = max_start || min_start + 1000 * 60 * 60 * 24;
+        min_w = min_w || 1000 * 60 * 15;
+        max_w = max_w || 1000 * 60 * 60 * 2;
+
+        var events_data = [];
+        for(var i = 0; i < n; i++){
+            /* Random width in milliseconds */
+            var w = randInt(min_w, max_w);
+
+            /* Random start/end times */
+            var min_start_ms = +min_start;
+            var max_start_ms = +max_start;
+            var start_ms = randInt(min_start_ms, max_start_ms);
+            var start = moment(start_ms);
+            var end = moment(start_ms + w);
+
+            /* Create test data */
+            var event_data = {
+                title: "Test Event",
+                description: "For testing purposes",
+                start: start,
+                end: end
+            };
+            events_data.push(event_data);
+        }
+
+        return events_data;
+    }
     Event.prototype = {
         update: function(data){
             this.id = data.id;
@@ -41,6 +75,9 @@ window.TVGuide = (function(){
         this.events = [];
     }
     Row.prototype = {
+        clear: function(){
+            this.events.length = 0;
+        },
         add_event: function(new_event){
             this.events.push(new_event);
         }
@@ -53,37 +90,11 @@ window.TVGuide = (function(){
         /* Map from IDs to Events */
         this.events = {};
     }
+    TVGuide.Event = Event;
+    TVGuide.Row = Row;
     TVGuide.prototype = {
-        add_random_events: function(n, min_start, max_start, min_w, max_w){
-            /* Add random events for testing */
-
-            min_start = min_start || +moment();
-            max_start = max_start || min_start + 1000 * 60 * 60 * 24;
-            min_w = min_w || 1000 * 60 * 15;
-            max_w = max_w || 1000 * 60 * 60 * 2;
-
-            for(var i = 0; i < n; i++){
-                /* Random width in milliseconds */
-                var w = randInt(min_w, max_w);
-
-                /* Random start/end times */
-                var min_start_ms = +min_start;
-                var max_start_ms = +max_start;
-                var start_ms = randInt(min_start_ms, max_start_ms);
-                var start = moment(start_ms);
-                var end = moment(start_ms + w);
-
-                /* Create test data */
-                var data = {
-                    title: "Test Event",
-                    description: "For testing purposes",
-                    start: start,
-                    end: end
-                };
-
-                /* Add event */
-                this.add_event(data);
-            }
+        clear: function(){
+            this.rows.length = 0;
         },
         add_events: function(data){
             var n_events = data.length;
@@ -97,7 +108,7 @@ window.TVGuide = (function(){
 
             /* NOTE: If data.id is undefined, we still add an event.
             It's guaranteed not to update an existing event.
-            Useful for testing - see add_random_events. */
+            Useful for testing - see Event.random_events_data(). */
             if(id !== undefined && event !== undefined){
                 /* Event already exists, update it */
 

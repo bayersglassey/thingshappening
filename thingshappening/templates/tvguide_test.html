@@ -5,23 +5,64 @@
 <script>
     var TVGuide = window.TVGuide;
     $(document).ready(function(){
-        /* For testing only! */
 
+        /* Get important DOM elements */
         var main = document.getElementById('main');
+        var clear_btn = document.getElementById('clear_btn');
+        var generate_20_btn = document.getElementById('generate_20_btn');
 
+        /* The TVGuide and events data */
         var tvguide = new TVGuide();
-        tvguide.add_random_events(40);
         var view = tvguide.get_simple_view();
-        main.append(view.render());
+        create_random_events(50);
+
+
+        /********************
+         * Widget functions *
+         ********************/
+
+        function create_random_events(n){
+            var events_data = TVGuide.Event.random_events_data(40);
+            tvguide.add_events(events_data);
+            render();
+        }
+        function render(){
+            main.textContent = "";
+            main.append(view.render());
+        }
+
+
+        /*******************
+         * Event listeners *
+         *******************/
+
+        clear_btn.onclick = function(event){
+            tvguide.clear();
+            render();
+        }
+        generate_20_btn.onclick = function(event){
+            create_random_events(20);
+        }
 
     });
 </script>
 {% endblock %}
 
 {% block main %}
+    <style>
+        #main {
+            height: 20em;
+            overflow-y: auto;
+        }
+    </style>
     <div class="panel panel-default">
         <div class="panel-body">
             <div id="main">
+            </div>
+            <div>
+                <button id="clear_btn">Clear events</button>
+                <br>
+                <button id="generate_20_btn">Generate 20 new events</button>
             </div>
         </div>
     </div>

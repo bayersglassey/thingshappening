@@ -210,10 +210,30 @@ window.TVGuide = (function(){
             var rows = tvguide.rows;
             var n_rows = rows.length;
 
-            /* Create element for view */
+            /* Create elements for view */
+            var view_container_elem = document.createElement('div');
+            view_container_elem.setAttribute('class', 'tvguide-simpleview-container');
             var view_elem = document.createElement('div');
             view_elem.setAttribute('class', 'tvguide-simpleview');
             view_elem.style.height = as_px(n_rows * row_h);
+            view_elem.style.top = as_px(row_h);
+            view_container_elem.append(view_elem);
+
+            /* Create datemarker element */
+            var datemarker = document.createElement('span');
+            datemarker.setAttribute('class', 'tvguide-simpleview-datemarker');
+            datemarker.style.height = as_px(row_h);
+            datemarker.style.position = 'absolute';
+            datemarker.style.top = 0;
+            view_container_elem.append(datemarker);
+
+            /* Update datemarker position & text when mouse moves */
+            view_container_elem.onmousemove = function(event){
+                var view_rect = view_elem.getBoundingClientRect();
+                var x = event.clientX - view_rect.x;
+                datemarker.style.left = as_px(x);
+                datemarker.textContent = moment(start + x / ms_w);
+            }
 
             /* Loop over all rows */
             for(var i = 0; i < n_rows; i++){
@@ -242,7 +262,7 @@ window.TVGuide = (function(){
                     /* Create element for event */
                     var event_elem = document.createElement('div');
                     event_elem.setAttribute('class', 'tvguide-simpleview-event');
-                    event_elem.textContent = "E-" + Number(event.id);
+                    event_elem.textContent = event.title;
                     event_elem.style.left = as_px((event_start_ms - start_ms) * ms_w);
                     event_elem.style.width = as_px(event_w_ms * ms_w);
                     event_elem.style.height = as_px(row_h);
@@ -251,7 +271,7 @@ window.TVGuide = (function(){
             }
 
             /* Return element representing view */
-            return view_elem;
+            return view_container_elem;
         }
     };
 

@@ -3,6 +3,7 @@ from random import randint
 from datetime import datetime, timedelta
 
 from django.utils import timezone
+from django.conf import settings
 
 from .models import Event, THUser
 
@@ -99,6 +100,19 @@ NOUNS = [
 ]
 
 
+STOCK_IMAGES = [
+    'canyon.jpg',
+    'dragonfly.jpg',
+    'hill-town.jpg',
+    'rain-on-sea.jpg',
+    'compy-chips.jpg',
+    'eagle.jpg',
+    'frog.jpg',
+    'rain-on-leaf.jpg',
+    'tulips.jpg',
+]
+
+
 def pick_one(options):
     return options[randint(0, len(options) - 1)]
 
@@ -140,6 +154,9 @@ def random_range(range_start=None, range_end=None):
     if start > end:
         start, end = end, start
     return start, end
+
+def random_image_url():
+    return '{}thingshappening/img/{}'.format(settings.STATIC_URL, pick_one(STOCK_IMAGES))
 
 def create_random_users(n=1):
     users = []
@@ -188,6 +205,7 @@ def create_random_events(n=1, range_start=None, range_end=None, user=None):
             description="Test event",
             start=start,
             end=end,
+            image_url=random_image_url(),
         )
         events.append(event)
     return events

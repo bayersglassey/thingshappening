@@ -15,6 +15,7 @@ class Event(models.Model):
     user = models.ForeignKey('thingshappening.thuser')
     start = models.DateTimeField()
     end = models.DateTimeField()
+    image_url = models.CharField(max_length=200, blank=True)
     def __str__(self):
         return "{} ({} - {})".format(self.title,
             fmt_datetime(self.start), fmt_datetime(self.end))

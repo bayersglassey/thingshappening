@@ -56,6 +56,7 @@ class EventSerializer(serializers.ModelSerializer):
             'user_link',
             'start',
             'end',
+            'image_url',
         )
 
     user_link = serializers.HyperlinkedRelatedField(source='user',

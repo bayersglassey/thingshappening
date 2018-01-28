@@ -133,6 +133,19 @@ def random_title():
     noun = pick_one(NOUNS)
     return "{} {}".format(adj, noun)
 
+def random_duration(min, max):
+    # expects 2 timedeltas, returns a timedelta
+    return timedelta(
+        seconds=randint(
+            0,
+            int((max-min).total_seconds())
+        )
+    )
+
+def random_datetime(min, max):
+    # expects 2 datetimes, returns a datetime
+    return min + random_duration(timedelta(), max-min)
+
 def random_range(range_start=None, range_end=None):
     if range_start is None:
         range_start = timezone.now()
@@ -185,8 +198,16 @@ def create_random_users(n=1):
         users.append(user)
     return users
 
-def create_random_events(n=1, range_start=None, range_end=None, user=None):
-    events = []
+def create_random_events(n=1, start=None, duration=None, event_duration_min=None, event_duration_max=None, user=None):
+
+    if start is None:
+        start = timezone.now()
+    if duration is None:
+        duration = timedelta(days=1)
+    if event_duration_min is None:
+        event_duration_min = timedelta(minutes=15)
+    if event_duration_max is None:
+        event_duration_max = timedelta(hours=2)
 
     # If you don't pass a user to this function, it will choose a random
     # one for each event.
@@ -195,16 +216,19 @@ def create_random_events(n=1, range_start=None, range_end=None, user=None):
     if user is None:
         users = THUser.objects.all()
 
+    events = []
     for i in range(n):
         if users is not None:
             user = pick_one(users)
-        start, end = random_range(range_start, range_end)
+        event_duration = random_duration(event_duration_min, event_duration_max)
+        event_start = random_datetime(start, start + duration - event_duration)
+        event_end = event_start + event_duration
         event = Event.objects.create(
             user=user,
             title=random_title(),
             description="Test event",
-            start=start,
-            end=end,
+            start=event_start,
+            end=event_end,
             image_url=random_image_url(),
         )
         events.append(event)

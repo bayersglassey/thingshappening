@@ -24,7 +24,9 @@
          ********************/
 
         function create_random_events(n){
-            var events_data = TVGuide.Event.random_events_data(40);
+            var start = view.get_start();
+            var duration = view.get_duration();
+            var events_data = TVGuide.Event.random_events_data(40, start, duration);
             tvguide.add_events(events_data);
             view.update();
         }
@@ -33,7 +35,9 @@
             view.update();
         }
         function crop_events(){
-            view.crop();
+            var start = view.get_start();
+            var duration = view.get_duration();
+            tvguide.crop(start, duration);
             view.update();
         }
 

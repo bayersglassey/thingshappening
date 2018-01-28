@@ -9,6 +9,19 @@ window.TVGuide = (function(){
         return String(x) + 'px';
     }
 
+    function seconds(x){
+        return x * 1000;
+    }
+    function minutes(x){
+        return x * 1000 * 60;
+    }
+    function hours(x){
+        return x * 1000 * 60 * 60;
+    }
+    function days(x){
+        return x * 1000 * 60 * 60 * 24;
+    }
+
     function Event(data){
         /*
         Represents an event within a specific TVGuide widget
@@ -17,34 +30,32 @@ window.TVGuide = (function(){
         */
         this.update(data);
     }
-    Event.random_events_data = function(n, min_start, max_start, min_w, max_w){
+    Event.random_events_data = function(n, start, duration, min_event_duration, max_event_duration){
         /* Create random event data for testing.
         The data is suitable for use with TVGuide.add_events(). */
 
         n = n | 1;
-        min_start = min_start || +moment();
-        max_start = max_start || min_start + 1000 * 60 * 60 * 24;
-        min_w = min_w || 1000 * 60 * 15;
-        max_w = max_w || 1000 * 60 * 60 * 2;
+        start = start || +moment();
+        duration = duration || days(1);
+        min_event_duration = min_event_duration || minutes(15);
+        max_event_duration = max_event_duration || hours(2);
 
         var events_data = [];
         for(var i = 0; i < n; i++){
-            /* Random width in milliseconds */
-            var w = randInt(min_w, max_w);
 
-            /* Random start/end times */
-            var min_start_ms = +min_start;
-            var max_start_ms = +max_start;
-            var start_ms = randInt(min_start_ms, max_start_ms);
-            var start = moment(start_ms);
-            var end = moment(start_ms + w);
+            /* Random event duration in milliseconds */
+            var event_duration = randInt(min_event_duration, max_event_duration);
+
+            /* Random event start */
+            var event_start = moment(start + randInt(0, duration - event_duration));
 
             /* Create test data */
             var event_data = {
                 title: "Test Event",
                 description: "For testing purposes",
-                start: start,
-                end: end
+                start: event_start,
+                end: event_start + event_duration,
+                // image_url: "/static/thingshappening/img/rain-on-leaf.jpg"
             };
             events_data.push(event_data);
         }
@@ -58,6 +69,7 @@ window.TVGuide = (function(){
             this.description = data.description;
             this.start = moment(data.start);
             this.end = moment(data.end);
+            this.image_url = data.image_url;
 
             /* Save the raw data too, just in case... */
             this.data = data;
@@ -210,25 +222,23 @@ window.TVGuide = (function(){
         this.start = start || moment();
 
         /* Width of a millisecond in pixels */
-        this.ms_w = ms_w || 1 / 1000 / 60;
+        this.ms_w = ms_w || 1 / minutes(1);
 
         /* Row height in pixels */
         this.row_h = row_h || 20;
     }
     SimpleView.prototype = {
-        get_x_time: function(x){
+        px_to_moment: function(x){
             return moment(this.start + x / this.ms_w);
         },
-        get_w_ms: function(w){
+        px_to_duration: function(w){
             return w / this.ms_w;
         },
-        crop: function(){
-            var view_container_elem = this.view_container_elem;
-            var x = view_container_elem.scrollLeft;
-            var w = view_container_elem.clientWidth;
-            var x_time = this.get_x_time(x);
-            var w_ms = this.get_w_ms(w);
-            this.tvguide.crop(x_time, w_ms);
+        get_start: function(){
+            return this.px_to_moment(this.view_container_elem.scrollLeft);
+        },
+        get_duration: function(){
+            return this.px_to_duration(this.view_container_elem.clientWidth);
         },
         render: function(){
             /* Creates & returns a DOM element representing the view. */
@@ -243,13 +253,20 @@ window.TVGuide = (function(){
             view_elem.setAttribute('class', 'tvguide-simpleview');
             view_container_elem.append(view_elem);
 
+            /* Create pseudo-row element for containing datemarker */
+            var datemarker_container_elem = document.createElement('div');
+            datemarker_container_elem.setAttribute('class',
+                'tvguide-simpleview-datemarker-container');
+            datemarker_container_elem.style.height = as_px(this.row_h);
+            view_elem.append(datemarker_container_elem);
+
             /* Create datemarker element */
             var datemarker = document.createElement('span');
             datemarker.setAttribute('class',
                 'tvguide-simpleview-datemarker');
             datemarker.style.position = 'absolute';
             datemarker.style.top = 0;
-            view_elem.append(datemarker);
+            datemarker_container_elem.append(datemarker);
 
             /* Update datemarker position & text when mouse moves */
             var view = this;
@@ -257,7 +274,7 @@ window.TVGuide = (function(){
                 var view_rect = view_elem.getBoundingClientRect();
                 var x = event.clientX - view_rect.x;
                 datemarker.style.left = as_px(x);
-                datemarker.textContent = view.get_x_time(x);
+                datemarker.textContent = view.px_to_moment(x);
             }
 
             /* Store elements */
@@ -289,8 +306,9 @@ window.TVGuide = (function(){
             view_elem.style.height = as_px((n_rows + 1) * row_h);
             datemarker.style.height = as_px(row_h);
 
-            /* Clear previously rendered events */
-            view_elem.textContent = "";
+            /* Clear previously rendered rows & their events */
+            var row_elems = view_elem.getElementsByClassName('tvguide-simpleview-row');
+            while(row_elems.length > 0)row_elems[0].remove();
 
             /* Loop over all rows, rendering their events */
             for(var i = 0; i < n_rows; i++){
@@ -299,7 +317,6 @@ window.TVGuide = (function(){
                 /* Create element for row */
                 var row_elem = document.createElement('div');
                 row_elem.setAttribute('class', 'tvguide-simpleview-row');
-                row_elem.style.top = as_px((i + 1) * row_h);
                 row_elem.style.height = as_px(row_h);
                 view_elem.append(row_elem);
 
@@ -320,9 +337,13 @@ window.TVGuide = (function(){
                     var event_elem = document.createElement('div');
                     event_elem.setAttribute('class', 'tvguide-simpleview-event');
                     event_elem.textContent = event.title;
+                    event_elem.style.top = as_px(0);
                     event_elem.style.left = as_px((event_start_ms - start_ms) * ms_w);
                     event_elem.style.width = as_px(event_w_ms * ms_w);
                     event_elem.style.height = as_px(row_h);
+                    if(event.image_url){
+                        event_elem.style.backgroundImage = 'url("' + event.image_url + '")';
+                    }
                     row_elem.append(event_elem);
                 }
             }

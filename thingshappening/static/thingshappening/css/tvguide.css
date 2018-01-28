@@ -13,7 +13,7 @@
 }
 
 .tvguide-simpleview-row {
-    position: absolute;
+    position: relative;
 }
 
 .tvguide-simpleview-event {
@@ -21,6 +21,11 @@
     background: #5c1;
     overflow: hidden;
     white-space: nowrap;
+    background-size: cover;
+}
+
+.tvguide-simpleview-datemarker-container {
+    position: relative;
 }
 
 .tvguide-simpleview-datemarker {

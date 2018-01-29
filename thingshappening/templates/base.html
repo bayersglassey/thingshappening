@@ -19,25 +19,26 @@
             <div class="container">
                 <row>
                     <div class="navbar-header">
-                        <h1 id="navbar-title">ThingsHappening.</h1>
-                        <p>Things are happening! You should know about them. You might even want to join in.</p>
-                        <p>Are you going to cause a thing to happen? Maybe you should list it here.</p>
-
-                        <!--
+                        <h4>Nav</h4>
                         <ul>
+                            <li>Go <a href="{% url "index" %}">home</a>.</li>
                             <li>Test the <a href="{% url "calendar_test" %}">calendar widget</a>.</li>
                             <li>Test the <a href="{% url "tvguide_test" %}">TV guide widget</a>.</li>
-                            <li>Go <a href="{% url "index" %}">home</a>.</li>
                         </ul>
-                        -->
                     </div>
                 </div>
             </div>
         </nav>
         <div class="container">
-            <div class="row">
-                {% block main %}
-                {% endblock %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h1 id="navbar-title">ThingsHappening.</h1>
+                    <br>
+                    <p>Things are happening! You should know about them. You might even want to join in.</p>
+                    <br>
+                    {% block main %}
+                    {% endblock %}
+                </div>
             </div>
         </div>
         {% block js %}

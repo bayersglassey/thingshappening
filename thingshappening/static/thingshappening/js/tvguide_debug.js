@@ -26,7 +26,8 @@ $(document).ready(function(){
     ms_w_inpt.value = view.ms_w;
     row_h_inpt.value = view.row_h;
 
-    /* Attach view element */
+    /* Attach datemarker and view element */
+    main.before(view.render_datemarker());
     main.append(view.get_elem());
 
     /* Add some events */

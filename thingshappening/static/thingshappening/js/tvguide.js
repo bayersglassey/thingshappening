@@ -374,6 +374,27 @@ window.TVGuide = (function(){
          * SIMPLEVIEW: RENDERING & UPDATING *
          ************************************/
 
+        render_datemarker: function(){
+            /* Create datemarker element */
+            var datemarker = document.createElement('h4');
+            datemarker.setAttribute('class',
+                'tvguide-simpleview-datemarker');
+
+            /* Update datemarker's text when mouse moves */
+            var view = this;
+            var view_elem = this.view_elem;
+            var view_container_elem = this.view_container_elem;
+            function update_datemarker(mouse_x){
+                var view_rect = view_elem.getBoundingClientRect();
+                var x = mouse_x - view_rect.x;
+                datemarker.textContent = view.px_to_moment(x);
+            }
+            view_container_elem.onmousemove = function(event){
+                update_datemarker(event.clientX);
+            }
+            update_datemarker(0);
+            return datemarker;
+        },
         render: function(){
             /* Creates & returns a DOM element representing the view.
             WARNING: Don't call this yourself!.. it should only be called
@@ -386,33 +407,14 @@ window.TVGuide = (function(){
             view_container_elem.setAttribute('class',
                 'tvguide-simpleview-container');
 
-            /* Create datemarker element */
-            var datemarker = document.createElement('span');
-            datemarker.setAttribute('class',
-                'tvguide-simpleview-datemarker');
-            view_container_elem.append(datemarker);
-
             /* Create inner element */
             var view_elem = document.createElement('div');
             view_elem.setAttribute('class', 'tvguide-simpleview');
             view_container_elem.append(view_elem);
 
-            /* Update datemarker's text when mouse moves */
-            var view = this;
-            function update_datemarker(mouse_x){
-                var view_rect = view_elem.getBoundingClientRect();
-                var x = mouse_x - view_rect.x;
-                datemarker.textContent = view.px_to_moment(x);
-            }
-            view_container_elem.onmousemove = function(event){
-                update_datemarker(event.clientX);
-            }
-            update_datemarker(0);
-
             /* Store elements */
             this.view_container_elem = view_container_elem;
             this.view_elem = view_elem;
-            this.datemarker = datemarker;
         },
         update: function(){
             /* Re-renders data */
@@ -420,7 +422,6 @@ window.TVGuide = (function(){
             /* Pull some values of 'this' into variables */
             var view_container_elem = this.view_container_elem;
             var view_elem = this.view_elem;
-            var datemarker = this.datemarker;
             var tvguide = this.tvguide;
             var start = this.start;
             var duration = this.duration;

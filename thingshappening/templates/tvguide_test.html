@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block js %}
 {{ block.super }}
@@ -8,27 +9,59 @@
 
         /* Get important DOM elements */
         var main = document.getElementById('main');
+        var debug_info = document.getElementById('debug_info');
+        var refresh_debug_info_btn = document.getElementById('refresh_debug_info_btn');
         var clear_btn = document.getElementById('clear_btn');
         var generate_20_btn = document.getElementById('generate_20_btn');
+        var limit_to_view_check = document.getElementById('limit_to_view_check');
+        var api_load_btn = document.getElementById('api_load_btn');
+        var generate_on_scroll_check = document.getElementById('generate_on_scroll_check');
+        var load_on_scroll_check = document.getElementById('load_on_scroll_check');
+        var debug_scroll_check = document.getElementById('debug_scroll_check');
 
-        /* The TVGuide and events data */
+        /* The TVGuide, view, and controller */
         var tvguide = new TVGuide();
         var view = tvguide.get_simple_view();
-        var view_elem = view.render();
-        create_random_events(50);
-        main.append(view_elem);
+        var controller = new TVGuide.SimpleController(view);
+        controller.active = false;
+
+        /* Attach view element */
+        main.append(view.get_elem());
+
+        /* Add some events */
+        create_random_events(50, false);
 
 
         /********************
          * Widget functions *
          ********************/
 
-        function create_random_events(n){
-            var start = view.get_start();
-            var duration = view.get_duration();
-            var events_data = TVGuide.Event.random_events_data(40, start, duration);
+        function create_random_events(n, limit_to_view){
+            var start, duration;
+            if(limit_to_view){
+                start = view.get_start();
+                duration = view.get_duration();
+            }else{
+                start = view.start;
+                duration = view.duration;
+            }
+            var events_data = TVGuide.Event.random_events_data(n, start, duration);
             tvguide.add_events(events_data);
             view.update();
+        }
+        function load_api_events(){
+            var start = view.get_start();
+            var duration = view.get_duration();
+            var end = moment(start + duration);
+            var query = {
+                start__lte: end.format(),
+                end__gte: start.format()
+            };
+            th_api.events.get_all(query).then(function(data){
+                var events_data = data.results;
+                tvguide.add_events(events_data);
+                view.update();
+            });
         }
         function clear_events(){
             tvguide.clear();
@@ -36,8 +69,8 @@
         }
         function crop_events(){
             var start = view.get_start();
-            var duration = view.get_duration();
-            tvguide.crop(start, duration);
+            var end = view.get_end();
+            tvguide.crop(start, end);
             view.update();
         }
 
@@ -46,6 +79,13 @@
          * Event listeners *
          *******************/
 
+        refresh_debug_info_btn.onclick = function(event){
+            debug_info.value =
+                "Number of events: " + String(tvguide.events.length)
+                + "\nNumber of rows: " + String(tvguide.rows.length)
+                + "\nNumber of API calls: " + String(controller.n_api_calls)
+            ;
+        }
         clear_btn.onclick = function(event){
             clear_events();
         }
@@ -53,7 +93,16 @@
             crop_events();
         }
         generate_20_btn.onclick = function(event){
-            create_random_events(20);
+            create_random_events(20, limit_to_view_check.checked);
+        }
+        api_load_btn.onclick = function(event){
+            load_api_events();
+        }
+        load_on_scroll_check.onclick = function(event){
+            controller.active = load_on_scroll_check.checked;
+        }
+        debug_scroll_check.onclick = function(event){
+            controller.DEBUG_SCROLL = debug_scroll_check.checked;
         }
 
     });
@@ -64,7 +113,7 @@
     <style>
         #main {
             width: 100%;
-            height: 20em;
+            height: 25em;
         }
     </style>
     <div class="panel panel-default">
@@ -77,6 +126,31 @@
                 <button id="crop_btn">Crop events</button>
                 <br>
                 <button id="generate_20_btn">Generate 20 new events</button>
+                <label>
+                    <input type="checkbox" id="limit_to_view_check">
+                    (Limited to view)
+                </label>
+                <br>
+                <button id="api_load_btn">Load events via API</button>
+                <br>
+                <label>
+                    <input type="checkbox" id="generate_on_scroll_check">
+                    Add random events on scroll
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" id="load_on_scroll_check">
+                    Load events form API on scroll
+                </label>
+                <br>
+                <label>
+                    <input type="checkbox" id="debug_scroll_check">
+                    Show debug markers on scroll
+                </label>
+                <br>
+                <button id="refresh_debug_info_btn">Refresh debug info</button>
+                <br>
+                <textarea id="debug_info" cols=40 rows=4>Debug info</textarea>
             </div>
         </div>
     </div>

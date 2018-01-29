@@ -1,14 +1,16 @@
 
 .tvguide-simpleview-container {
     position: relative;
+
+    overflow: auto;
+
     width: 100%;
     height: 100%;
-    overflow: auto;
 }
 
 .tvguide-simpleview {
     position: relative;
-    width: 160em;
+
     overflow: hidden;
 }
 
@@ -18,10 +20,31 @@
 
 .tvguide-simpleview-event {
     position: absolute;
-    background: #5c1;
+
     overflow: hidden;
     white-space: nowrap;
+
+    /* fill containing row element */
+    height: 100%;
+
+    font-weight: bold;
+
+    background: #ccc;
+
     background-size: cover;
+}
+
+.tvguide-simpleview-event-title {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.tvguide-simpleview-event-veil {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: .6;
 }
 
 .tvguide-simpleview-datemarker-container {
@@ -30,6 +53,10 @@
 
 .tvguide-simpleview-datemarker {
     position: absolute;
+
     overflow: hidden;
     white-space: nowrap;
+
+    /* fill containing row element */
+    height: 100%;
 }

@@ -13,7 +13,6 @@ $(document).ready(function(){
     var row_h_inpt = document.getElementById('row_h_inpt');
     var limit_to_view_check = document.getElementById('limit_to_view_check');
     var api_load_btn = document.getElementById('api_load_btn');
-    var generate_on_scroll_check = document.getElementById('generate_on_scroll_check');
     var load_on_scroll_check = document.getElementById('load_on_scroll_check');
     var debug_scroll_check = document.getElementById('debug_scroll_check');
 

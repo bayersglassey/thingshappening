@@ -47,16 +47,7 @@
     opacity: .6;
 }
 
-.tvguide-simpleview-datemarker-container {
-    position: relative;
-}
-
 .tvguide-simpleview-datemarker {
-    position: absolute;
-
-    overflow: hidden;
-    white-space: nowrap;
-
-    /* fill containing row element */
-    height: 100%;
+    width: 100%;
+    text-align: center;
 }

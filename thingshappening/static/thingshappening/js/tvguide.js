@@ -367,34 +367,28 @@ window.TVGuide = (function(){
             view_container_elem.setAttribute('class',
                 'tvguide-simpleview-container');
 
+            /* Create datemarker element */
+            var datemarker = document.createElement('span');
+            datemarker.setAttribute('class',
+                'tvguide-simpleview-datemarker');
+            view_container_elem.append(datemarker);
+
             /* Create inner element */
             var view_elem = document.createElement('div');
             view_elem.setAttribute('class', 'tvguide-simpleview');
             view_container_elem.append(view_elem);
 
-            /* Create pseudo-row element for containing datemarker */
-            var datemarker_container_elem = document.createElement('div');
-            datemarker_container_elem.setAttribute('class',
-                'tvguide-simpleview-datemarker-container');
-            datemarker_container_elem.style.height = as_px(this.row_h);
-            view_elem.append(datemarker_container_elem);
-
-            /* Create datemarker element */
-            var datemarker = document.createElement('span');
-            datemarker.setAttribute('class',
-                'tvguide-simpleview-datemarker');
-            datemarker.style.position = 'absolute';
-            datemarker.style.top = 0;
-            datemarker_container_elem.append(datemarker);
-
-            /* Update datemarker position & text when mouse moves */
+            /* Update datemarker's text when mouse moves */
             var view = this;
-            view_container_elem.onmousemove = function(event){
+            function update_datemarker(mouse_x){
                 var view_rect = view_elem.getBoundingClientRect();
-                var x = event.clientX - view_rect.x;
-                datemarker.style.left = as_px(x);
+                var x = mouse_x - view_rect.x;
                 datemarker.textContent = view.px_to_moment(x);
             }
+            view_container_elem.onmousemove = function(event){
+                update_datemarker(event.clientX);
+            }
+            update_datemarker(0);
 
             /* Store elements */
             this.view_container_elem = view_container_elem;

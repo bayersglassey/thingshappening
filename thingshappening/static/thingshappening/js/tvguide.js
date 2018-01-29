@@ -34,6 +34,9 @@ window.TVGuide = (function(){
         /* index of row we're in */
         this.row_i = null;
 
+        /* DOM element */
+        this.elem = null;
+
         this.update(data);
     }
     Event.random_events_data = function(n, start, duration, min_event_duration, max_event_duration){
@@ -93,6 +96,9 @@ window.TVGuide = (function(){
 
         /* Array of events */
         this.events = [];
+
+        /* DOM element */
+        this.elem = null;
     }
     Row.prototype = {
         add_event: function(new_event){
@@ -118,9 +124,19 @@ window.TVGuide = (function(){
     }
     TVGuide.prototype = {
         clear: function(){
-            this.rows.length = 0;
+            /* Unplace all events */
+            var events = this.events;
+            var n_events = events.length;
+            for(var i = n_events - 1; i >= 0; i--){
+                var event = events[i];
+                this.unplace_event(event);
+            }
+
+            /* Clear all events */
             this.events.length = 0;
             this.events_by_id = {};
+
+            /* NOTE: Don't clear the rows... it'll confuse SimpleView */
         },
         remove_event: function(event){
             /* Remove from this.events_by_id */
@@ -169,20 +185,15 @@ window.TVGuide = (function(){
                     (start - event.start != 0) ||
                     (end - event.end != 0);
 
-                /* FOR DEBUGGING PURPOSES */
-                move_event = true;
-
                 if(move_event){
-                    /* Simple move strategy: first remove it, then put it back
-                    as if it were new */
+                    /* Simple move strategy: un-place it, then re-place it. */
                     this.unplace_event(event);
                 }
 
                 event.update(data);
 
                 if(move_event){
-                    /* Simple move strategy: first remove it, then put it back
-                    as if it were new */
+                    /* Simple move strategy: un-place it, then re-place it. */
                     this.place_event(event);
                 }
             }else{
@@ -204,6 +215,14 @@ window.TVGuide = (function(){
             /* Remove from row */
             var row = this.rows[event.row_i];
             row.remove_event(event);
+
+            if(event.elem){
+                /* Remove event's DOM element */
+                $(event.elem).fadeOut(undefined, function(){
+                    this.remove();
+                });
+                event.elem = null;
+            }
         },
         place_event: function(new_event){
             /* Figure out which row to put event into, and put it there.
@@ -414,20 +433,23 @@ window.TVGuide = (function(){
             /* Update view width */
             view_elem.style.width = as_px(this.duration_to_px(duration));
 
-            /* Clear previously rendered rows & their events */
-            var row_elems = view_elem.getElementsByClassName('tvguide-simpleview-row');
-            while(row_elems.length > 0)row_elems[0].remove();
-
-            /* Loop over all rows, rendering their events */
+            /* Loop over all rows, rendering their events as needed */
             for(var i = 0; i < n_rows; i++){
                 var row = rows[i];
 
-                /* Create element for row */
-                var row_elem = document.createElement('div');
-                row_elem.setAttribute('class', 'tvguide-simpleview-row');
-                row_elem.style.height = as_px(row_h);
-                view_elem.append(row_elem);
+                /* Get or create row's DOM element */
+                var row_elem = row.elem;
+                if(!row_elem){
+                    /* Create element for row */
+                    row_elem = document.createElement('div');
+                    row_elem.setAttribute('class', 'tvguide-simpleview-row');
+                    row_elem.style.height = as_px(row_h);
+                    view_elem.append(row_elem);
+                    row.elem = row_elem;
+                }
 
+                /* Update row height, and event listeners which use it */
+                row_elem.style.height = as_px(row_h);
                 (function(row_elem){
                     row_elem.onmouseover = function(event){
                         row_elem.style.height = as_px(row_h + 30);
@@ -442,35 +464,54 @@ window.TVGuide = (function(){
                 var n_events = events.length;
                 for(var j = 0; j < n_events; j++){
                     var event = events[j];
+
                     var event_start = event.start;
                     var event_end = event.end;
                     var event_duration = event_end - event_start;
 
-                    /* Create element for event */
-                    var event_elem = document.createElement('div');
-                    event_elem.setAttribute('class', 'tvguide-simpleview-event');
-                    event_elem.style.top = as_px(0);
+                    /* Get or create element for event */
+                    var event_elem = event.elem;
+                    var event_veil_elem, event_title_elem;
+                    if(!event_elem){
+                        var event_elem = document.createElement('div');
+                        event_elem.setAttribute('class', 'tvguide-simpleview-event');
+                        event_elem.style.top = as_px(0);
+                        event.elem = event_elem;
+
+                        /* Create 'veil' element (transparent overlay over the background image) */
+                        event_veil_elem = document.createElement('div');
+                        event_veil_elem.setAttribute('class', 'tvguide-simpleview-event-veil');
+                        event_elem.append(event_veil_elem);
+                        event.veil_elem = event_veil_elem;
+
+                        /* Create element for event title */
+                        event_title_elem = document.createElement('span');
+                        event_title_elem.setAttribute('class', 'tvguide-simpleview-event-title');
+                        event_elem.append(event_title_elem);
+                        event.title_elem = event_title_elem;
+
+                        /* Attach event element to row element */
+                        row_elem.append(event_elem);
+                        $(event_elem).hide().fadeIn();
+                    }else{
+                        event_veil_elem = event.veil_elem;
+                        event_title_elem = event.title_elem;
+                    }
+
+                    /* Update position, width, image */
                     event_elem.style.left = as_px((event_start - start) * ms_w);
                     event_elem.style.width = as_px(event_duration * ms_w);
                     if(event.image_url){
                         event_elem.style.backgroundImage = 'url("' + event.image_url + '")';
+                    }else{
+                        event_elem.style.backgroundImage = '';
                     }
 
-                    /* Create 'veil' element (transparent overlay over the background image) */
-                    var event_veil_elem = document.createElement('div');
-                    event_veil_elem.setAttribute('class', 'tvguide-simpleview-event-veil');
-                    event_elem.append(event_veil_elem);
-
-                    /* Create element for event title */
-                    var event_title_elem = document.createElement('span');
-                    event_title_elem.setAttribute('class', 'tvguide-simpleview-event-title');
-                    event_title_elem.textContent = event.title;
-                    event_elem.append(event_title_elem);
-
-                    /* Attach event element to row element */
-                    //$(event_elem).hide();
-                    row_elem.append(event_elem);
-                    //$(event_elem).fadeIn();
+                    /* Update title */
+                    var title = "";
+                    if(event.id !== null)title += event.id + ': ';
+                    title += event.title;
+                    event_title_elem.textContent = title;
                 }
             }
         }

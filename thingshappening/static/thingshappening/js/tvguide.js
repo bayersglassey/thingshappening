@@ -430,7 +430,7 @@ window.TVGuide = (function(){
 
                 (function(row_elem){
                     row_elem.onmouseover = function(event){
-                        row_elem.style.height = as_px(row_h * 3);
+                        row_elem.style.height = as_px(row_h + 30);
                     }
                     row_elem.onmouseout = function(event){
                         row_elem.style.height = as_px(row_h);

@@ -13,6 +13,8 @@
         var refresh_debug_info_btn = document.getElementById('refresh_debug_info_btn');
         var clear_btn = document.getElementById('clear_btn');
         var generate_20_btn = document.getElementById('generate_20_btn');
+        var ms_w_inpt = document.getElementById('ms_w_inpt');
+        var row_h_inpt = document.getElementById('row_h_inpt');
         var limit_to_view_check = document.getElementById('limit_to_view_check');
         var api_load_btn = document.getElementById('api_load_btn');
         var generate_on_scroll_check = document.getElementById('generate_on_scroll_check');
@@ -24,6 +26,8 @@
         var view = tvguide.get_simple_view();
         var controller = new TVGuide.SimpleController(view);
         controller.active = false;
+        ms_w_inpt.value = view.ms_w;
+        row_h_inpt.value = view.row_h;
 
         /* Attach view element */
         main.append(view.get_elem());
@@ -98,6 +102,20 @@
         api_load_btn.onclick = function(event){
             load_api_events();
         }
+        ms_w_inpt.onchange = function(event){
+            var ms_w = parseFloat(ms_w_inpt.value);
+            if(ms_w){
+                view.ms_w = ms_w;
+                view.update();
+            }
+        }
+        row_h_inpt.onchange = function(event){
+            var row_h = parseInt(row_h_inpt.value);
+            if(row_h){
+                view.row_h = row_h;
+                view.update();
+            }
+        }
         load_on_scroll_check.onclick = function(event){
             controller.active = load_on_scroll_check.checked;
         }
@@ -122,8 +140,8 @@
             </div>
             <div>
                 <button id="clear_btn">Clear events</button>
-                <br>
                 <button id="crop_btn">Crop events</button>
+                <button id="api_load_btn">Load events via API</button>
                 <br>
                 <button id="generate_20_btn">Generate 20 new events</button>
                 <label>
@@ -131,7 +149,15 @@
                     (Limited to view)
                 </label>
                 <br>
-                <button id="api_load_btn">Load events via API</button>
+                <label>
+                    <input type="text" id="ms_w_inpt">
+                    Width of a millisecond
+                </label>
+                <br>
+                <label>
+                    <input type="text" id="row_h_inpt">
+                    Height of an event
+                </label>
                 <br>
                 <label>
                     <input type="checkbox" id="generate_on_scroll_check">

@@ -1,0 +1,51 @@
+<style>
+    #main {
+        width: 100%;
+        height: 25em;
+    }
+</style>
+
+<div id="main">
+</div>
+
+<button id="toggle_debug_btn">Show/Hide Debug Widgets</button>
+<div id="debug_widgets" style="display: none;">
+    <button id="clear_btn">Clear events</button>
+    <button id="crop_btn">Crop events</button>
+    <button id="api_load_btn">Load events via API</button>
+    <br>
+    <button id="generate_20_btn">Generate 20 new events</button>
+    <label>
+        <input type="checkbox" id="limit_to_view_check">
+        (Limited to view)
+    </label>
+    <br>
+    <label>
+        <input type="text" id="ms_w_inpt">
+        Width of a millisecond
+    </label>
+    <br>
+    <label>
+        <input type="text" id="row_h_inpt">
+        Height of an event
+    </label>
+    <br>
+    <label>
+        <input type="checkbox" id="generate_on_scroll_check">
+        Add random events on scroll
+    </label>
+    <br>
+    <label>
+        <input type="checkbox" id="load_on_scroll_check">
+        Load events from API on scroll
+    </label>
+    <br>
+    <label>
+        <input type="checkbox" id="debug_scroll_check">
+        Show debug markers on scroll
+    </label>
+    <br>
+    <button id="refresh_debug_info_btn">Refresh debug info</button>
+    <br>
+    <textarea id="debug_info" cols=40 rows=4>Debug info</textarea>
+</div>

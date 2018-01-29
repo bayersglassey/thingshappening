@@ -9,6 +9,8 @@
 
         /* Get important DOM elements */
         var main = document.getElementById('main');
+        var toggle_debug_btn = document.getElementById('toggle_debug_btn');
+        var debug_widgets = document.getElementById('debug_widgets');
         var debug_info = document.getElementById('debug_info');
         var refresh_debug_info_btn = document.getElementById('refresh_debug_info_btn');
         var clear_btn = document.getElementById('clear_btn');
@@ -20,6 +22,8 @@
         var generate_on_scroll_check = document.getElementById('generate_on_scroll_check');
         var load_on_scroll_check = document.getElementById('load_on_scroll_check');
         var debug_scroll_check = document.getElementById('debug_scroll_check');
+
+        var debug_widgets_visible = false;
 
         /* The TVGuide, view, and controller */
         var tvguide = new TVGuide();
@@ -83,6 +87,14 @@
          * Event listeners *
          *******************/
 
+        toggle_debug_btn.onclick = function(event){
+            debug_widgets_visible = !debug_widgets_visible;
+            if(debug_widgets_visible){
+                debug_widgets.style.display = "";
+            }else{
+                debug_widgets.style.display = "none";
+            }
+        }
         refresh_debug_info_btn.onclick = function(event){
             debug_info.value =
                 "Number of events: " + String(tvguide.events.length)
@@ -138,7 +150,8 @@
         <div class="panel-body">
             <div id="main">
             </div>
-            <div>
+            <button id="toggle_debug_btn">Show/Hide Debug Widgets</button>
+            <div id="debug_widgets" style="display: none;">
                 <button id="clear_btn">Clear events</button>
                 <button id="crop_btn">Crop events</button>
                 <button id="api_load_btn">Load events via API</button>

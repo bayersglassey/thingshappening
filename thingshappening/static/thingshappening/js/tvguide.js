@@ -1,6 +1,11 @@
 
 window.TVGuide = (function(){
 
+
+    /*********************
+     * UTILITY FUNCTIONS *
+     *********************/
+
     function randInt(min, max){
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -23,6 +28,11 @@ window.TVGuide = (function(){
     function days(x){
         return x * 1000 * 60 * 60 * 24;
     }
+
+
+    /*********
+     * EVENT *
+     *********/
 
     function Event(data){
         /*
@@ -90,6 +100,11 @@ window.TVGuide = (function(){
         }
     };
 
+
+    /*******
+     * ROW *
+     *******/
+
     function Row(i){
         /* Row index */
         this.index = i;
@@ -116,6 +131,11 @@ window.TVGuide = (function(){
             return false;
         }
     };
+
+
+    /***********
+     * TVGUIDE *
+     ***********/
 
     function TVGuide(){
         this.rows = [];
@@ -266,6 +286,11 @@ window.TVGuide = (function(){
             return new SimpleView(this);
         }
     };
+
+
+    /**************
+     * SIMPLEVIEW *
+     **************/
 
     function SimpleView(tvguide, start, duration, ms_w, row_h){
         this.tvguide = tvguide;
@@ -518,6 +543,10 @@ window.TVGuide = (function(){
         }
     };
 
+
+    /********************
+     * SIMPLECONTROLLER *
+     ********************/
 
     SimpleController = function(view){
         this.active = true;

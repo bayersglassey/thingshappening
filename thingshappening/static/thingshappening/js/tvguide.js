@@ -378,6 +378,15 @@ window.TVGuide = (function(){
 
             return elem;
         },
+        remove_debug_marker: function(name){
+            if(name){
+                this.debug_markers = this.debug_markers || {};
+                if(this.debug_markers[name]){
+                    this.debug_markers[name].remove();
+                    delete this.debug_markers[name];
+                }
+            }
+        },
         mark_time: function(name, start, background){
             /* Get x position for marker */
             var x = this.moment_to_px(start);
@@ -548,7 +557,7 @@ window.TVGuide = (function(){
      * SIMPLECONTROLLER *
      ********************/
 
-    SimpleController = function(view){
+    SimpleController = function(view, buffer_ratio){
         this.active = true;
 
         this.n_api_calls = 0;
@@ -559,12 +568,24 @@ window.TVGuide = (function(){
         this.start = view.get_start();
         this.duration = view.get_duration();
 
+        /* We load events within the view's visible area, *plus* a bit of
+        extra space to left and right, so that user can scroll a little bit
+        without needing to hit the API for more events.
+        The width of that extra space in milliseconds is the buffer
+        duration.
+        The buffer ratio defines the buffer duration as a percentage of the
+        view's duration. */
+        this.buffer_ratio = buffer_ratio === undefined? 1/4: buffer_ratio;
+
         var controller = this;
         view.get_elem().onscroll = function(event){
             controller.onscroll();
         }
     }
     SimpleController.prototype = {
+        get_buffer_duration: function(){
+            return parseInt(this.view.get_duration() * this.buffer_ratio);
+        },
         onscroll: function(){
 
             var view = this.view;
@@ -580,29 +601,51 @@ window.TVGuide = (function(){
             var start_diff = new_start - old_start;
             var end_diff = new_end - old_end;
 
-            if(this.DEBUG_SCROLL){
-                this.view.mark_range('L', new_start, old_start, 'green');
-                this.view.mark_range('R', old_end, new_end, 'red');
-            }
+            var buffer_duration = this.get_buffer_duration();
 
-            if(this.active && (start_diff < 0 || end_diff > 0)){
+            var loaded_new_events = false;
+            if(this.active && (
+                start_diff < -buffer_duration ||
+                end_diff > buffer_duration
+            )){
+                loaded_new_events = true;
 
-                this.view.tvguide.crop(this.view.get_start(), this.view.get_end());
+                this.view.tvguide.crop(this.view.get_start(),
+                    this.view.get_end());
 
                 if(start_diff < 0){
                     /* Add events to start */
-                    this.load_events(new_start, old_start);
+                    var load_from = moment(new_start - buffer_duration);
+                    var load_to = old_start;
+                    this.load_events(load_from, load_to);
                 }
 
                 if(end_diff > 0){
                     /* Add events to end */
-                    this.load_events(old_end, new_end);
+                    var load_from = old_end;
+                    var load_to = moment(new_end + buffer_duration);
+                    this.load_events(load_from, load_to);
                 }
             }
 
-            /* Update start & duration */
-            this.start = new_start;
-            this.duration = new_duration;
+            /* Add/remove/update debug markers, showing amount of scroll and
+            how close we've come to scrolling by buffer_duration */
+            if(this.DEBUG_SCROLL){
+                if(old_start > new_start){
+                    this.view.mark_range('L', new_start, old_start, 'green')}
+                if(new_end > old_end){
+                    this.view.mark_range('R', old_end, new_end, 'red')}
+            }else{
+                this.view.remove_debug_marker('L');
+                this.view.remove_debug_marker('R');
+            }
+
+            var reset = loaded_new_events;
+            if(reset){
+                /* Update start & duration */
+                this.start = new_start;
+                this.duration = new_duration;
+            }
         },
         load_events: function(start, end){
             /* Load events via the API, and update the view with them */

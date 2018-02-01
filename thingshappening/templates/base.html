@@ -22,6 +22,8 @@
                         <h4>Nav</h4>
                         <ul>
                             <li>Go <a href="{% url "index" %}">home</a>.</li>
+                            <li><a href="{% url "auth:login" %}">Log in</a>.</li>
+                            <li><a href="{% url "auth:logout" %}">Log out</a>.</li>
                             <li>Test the <a href="{% url "calendar_test" %}">calendar widget</a>.</li>
                             <li>Test the <a href="{% url "tvguide_test" %}">TV guide widget</a>.</li>
                         </ul>

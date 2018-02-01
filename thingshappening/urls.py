@@ -17,6 +17,7 @@ api_urls = router.urls + [
 
 urlpatterns = [
     url(r'^$', views.index.as_view(), name='index'),
+    url(r'^auth/', include('django.contrib.auth.urls', namespace='auth')),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api_urls, namespace='api')),
     url(r'^calendar_test', TemplateView.as_view(template_name="calendar_test.html"), name='calendar_test'),

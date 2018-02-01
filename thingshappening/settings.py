@@ -27,12 +27,17 @@ DEBUG = False
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'thingshappening.thuser'
+LOGIN_REDIRECT_URL = 'index'
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # registration comes before admin, so it can override default
+    # auth templates
+    'registration',
     'django.contrib.admin',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

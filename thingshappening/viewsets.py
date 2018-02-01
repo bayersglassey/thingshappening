@@ -1,16 +1,36 @@
 
-from rest_framework import viewsets
+from rest_framework import viewsets, filters, pagination
+from django_filters import rest_framework as more_filters
 
 from .models import THUser, Event
 from .serializers import THUserSerializer, EventSerializer
 
+class THPagination(pagination.PageNumberPagination):
+    page_size = 100
 
-class THUserViewSet(viewsets.ModelViewSet):
+class THViewSetMixin:
+    pagination_class = THPagination
+    filter_backends = (more_filters.DjangoFilterBackend, filters.SearchFilter)
+
+class THViewSet(THViewSetMixin, viewsets.ModelViewSet):
+    pass
+
+
+class THUserViewSet(THViewSet):
+    queryset = THUser.objects.order_by('id')
     serializer_class = THUserSerializer
-    queryset = THUser.objects.all()
+    filter_fields = ('username', 'email', 'first_name', 'last_name')
+    search_fields = ('username', 'email', 'first_name', 'last_name')
 
 
-class EventViewSet(viewsets.ModelViewSet):
+class EventViewSet(THViewSet):
+    queryset = Event.objects.order_by('id')
     serializer_class = EventSerializer
-    queryset = Event.objects.all()
+    filter_fields = {
+        'user__username': ['exact'],
+        'user': ['exact'],
+        'start': ['exact', 'lte', 'gte'],
+        'end': ['exact', 'lte', 'gte'],
+    }
+    search_fields = ('title', 'user__username')
 

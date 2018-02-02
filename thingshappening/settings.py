@@ -28,6 +28,7 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'thingshappening.thuser'
 LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'
 
 
 # Application definition

@@ -18,15 +18,33 @@
         <nav id="nav-main" class="navbar navbar-default">
             <div class="container">
                 <row>
+                    <style>
+                        .th-nav {
+                            margin-left: 1.5em;
+                            margin-right: 1.5em;
+                            display: inline-block;
+                            vertical-align: top;
+                        }
+                    </style>
                     <div class="navbar-header">
-                        <h4>Nav</h4>
-                        <ul>
-                            <li>Go <a href="{% url "index" %}">home</a>.</li>
-                            <li><a href="{% url "auth:login" %}">Log in</a>.</li>
-                            <li><a href="{% url "auth:logout" %}">Log out</a>.</li>
-                            <li>Test the <a href="{% url "calendar_test" %}">calendar widget</a>.</li>
-                            <li>Test the <a href="{% url "tvguide_test" %}">TV guide widget</a>.</li>
-                        </ul>
+                        <div class="th-nav">
+                            <h4>Nav</h4>
+                            <ul>
+                                <li>Go <a href="{% url "index" %}">home</a>.</li>
+                                <li><a href="{% url "auth:login" %}">Log in</a>.</li>
+                                <li>Test the <a href="{% url "calendar_test" %}">calendar widget</a>.</li>
+                                <li>Test the <a href="{% url "tvguide_test" %}">TV guide widget</a>.</li>
+                            </ul>
+                        </div>
+                        {% if request.user.is_authenticated %}
+                        <div class="th-nav">
+                            <h4>Logged in</h4>
+                            <ul>
+                                <li>Manage your <a href="{% url "my_events" %}">events</a>.</li>
+                                <li><a href="{% url "auth:logout" %}">Log out</a>.</li>
+                            </ul>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

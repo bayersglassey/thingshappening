@@ -2,6 +2,9 @@
 from django.views.generic import TemplateView
 
 
-class index(TemplateView):
+class IndexView(TemplateView):
+    template_name = "index.html"
+
+class MyEventsView(TemplateView):
     template_name = "index.html"
 

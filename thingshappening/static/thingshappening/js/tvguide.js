@@ -367,7 +367,7 @@ window.TVGuide = (function(){
             elem.style.height = '10px';
             elem.style.top = as_px(0);
             elem.style.left = as_px(x0);
-            this.view_elem.append(elem);
+            this.view_elem.appendChild(elem);
 
             /* Keep track of markers, move them instead of creating new ones */
             if(name){
@@ -447,7 +447,7 @@ window.TVGuide = (function(){
             /* "\xa0" is unicode literal for "&nbsp;". We add one so the
             element doesn't collapse before we populate it with rows */
             view_elem.textContent = "\xa0";
-            view_container_elem.append(view_elem);
+            view_container_elem.appendChild(view_elem);
 
             /* Store elements */
             this.view_container_elem = view_container_elem;
@@ -485,7 +485,7 @@ window.TVGuide = (function(){
                     row_elem = document.createElement('div');
                     row_elem.setAttribute('class', 'tvguide-simpleview-row');
                     row_elem.style.height = as_px(row_h);
-                    view_elem.append(row_elem);
+                    view_elem.appendChild(row_elem);
                     row.elem = row_elem;
                 }
 
@@ -522,17 +522,17 @@ window.TVGuide = (function(){
                         /* Create 'veil' element (transparent overlay over the background image) */
                         event_veil_elem = document.createElement('div');
                         event_veil_elem.setAttribute('class', 'tvguide-simpleview-event-veil');
-                        event_elem.append(event_veil_elem);
+                        event_elem.appendChild(event_veil_elem);
                         event.veil_elem = event_veil_elem;
 
                         /* Create element for event title */
                         event_title_elem = document.createElement('span');
                         event_title_elem.setAttribute('class', 'tvguide-simpleview-event-title');
-                        event_elem.append(event_title_elem);
+                        event_elem.appendChild(event_title_elem);
                         event.title_elem = event_title_elem;
 
                         /* Attach event element to row element */
-                        row_elem.append(event_elem);
+                        row_elem.appendChild(event_elem);
                         $(event_elem).hide().fadeIn();
                     }else{
                         event_veil_elem = event.veil_elem;

@@ -11,7 +11,7 @@ window.th_calendar = (function($){
                 jan_2018.add_events([
                     {...}
                 ]);
-                document.body.append(jan_2018.elem_table);
+                document.body.appendChild(jan_2018.elem_table);
         */
 
         /* Turn year, month params into a date object */
@@ -34,16 +34,16 @@ window.th_calendar = (function($){
         /* Create the <table>'s <thead> and <tbody> */
         var elem_thead = document.createElement('thead');
         var elem_tbody = document.createElement('tbody');
-        elem_table.append(elem_thead);
-        elem_table.append(elem_tbody);
+        elem_table.appendChild(elem_thead);
+        elem_table.appendChild(elem_tbody);
 
         /* Create the title row (e.g. "Jan 2018") in thead */
         var elem_tr = document.createElement('tr');
         var elem_th = document.createElement('th');
         elem_th.textContent = d.format("MMM YYYY");
         elem_th.setAttribute('colspan', n_cols);
-        elem_tr.append(elem_th);
-        elem_thead.append(elem_tr);
+        elem_tr.appendChild(elem_th);
+        elem_thead.appendChild(elem_tr);
 
         /* Get the first letter of each weekday, save them in an array */
         var weekdays = moment.weekdays();
@@ -57,9 +57,9 @@ window.th_calendar = (function($){
         for(var j = 0; j < n_cols; j++){
             var elem_th = document.createElement('th');
             elem_th.textContent = weekdays[(j + 1) % 7];
-            elem_tr.append(elem_th);
+            elem_tr.appendChild(elem_th);
         }
-        elem_thead.append(elem_tr);
+        elem_thead.appendChild(elem_tr);
 
         /* Create the table cells representing the dates of the month */
         var n_datecells = n_cols * n_rows;
@@ -72,7 +72,7 @@ window.th_calendar = (function($){
                 /* Create <td> representing datecell */
                 var elem_td = document.createElement('td');
                 elem_td.setAttribute('class', 'zebra' + String(k % 2));
-                elem_tr.append(elem_td);
+                elem_tr.appendChild(elem_td);
 
                 /* Create datecell */
                 var datecell = datecells[k] = {
@@ -80,7 +80,7 @@ window.th_calendar = (function($){
                     events: []
                 };
             }
-            elem_tbody.append(elem_tr);
+            elem_tbody.appendChild(elem_tr);
         }
 
         /* Create the numbers in the table cells showing the dates of the month */
@@ -92,7 +92,7 @@ window.th_calendar = (function($){
             elem_daynumber.setAttribute('class', 'calendar-daynumber');
 
             datecell.elem_daynumber = elem_daynumber;
-            datecell.td.append(elem_daynumber);
+            datecell.td.appendChild(elem_daynumber);
         }
 
         /* Set attributes of 'this' */

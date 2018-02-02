@@ -27,6 +27,7 @@
                         }
                     </style>
                     <div class="navbar-header">
+                        <!--
                         <div class="th-nav">
                             <h4>Nav</h4>
                             <ul>
@@ -35,20 +36,27 @@
                                 <li>Test the <a href="{% url "tvguide_test" %}">TV guide widget</a>.</li>
                             </ul>
                         </div>
+                        -->
                         <div class="th-nav">
-                            {% if request.user.is_authenticated %}
-                            <h4>Hello <strong>{{ request.user.username }}</strong>!</h4>
+                                <h3>ThingsHappening</h3>
+                            </a>
+                            <h4>
+                                {% if request.user.is_authenticated %}
+                                    Hello <strong>{{ request.user.username }}</strong>!
+                                {% else %}
+                                    You're not logged in.
+                                {% endif %}
+                            </h4>
                             <ul>
-                                <li>Manage your <a href="{% url "my_events" %}">events</a>.</li>
-                                <li><a href="{% url "auth:logout" %}">Log out</a>.</li>
+                                {% if request.user.is_authenticated %}
+                                    <li>Manage your <a href="{% url "my_events" %}">events</a>.</li>
+                                    <li><a href="{% url "auth:logout" %}">Log out</a>.</li>
+                                {% else %}
+                                    <li>Ok, I'll <a href="{% url "auth:login" %}">log in</a>, then.</li>
+                                    <li>Actually, I need to <a href="{% url "auth:signup" %}">make an account</a>.</li>
+                                {% endif %}
+                                <li><a href="{% url "index" %}">Explore</a> a little.</li>
                             </ul>
-                            {% else %}
-                            <h4>Not logged in.</h4>
-                            <ul>
-                                <li>Ok, I'll <a href="{% url "auth:login" %}">log in</a>, then.</li>
-                                <li>Actually, I need to <a href="{% url "auth:signup" %}">make an account</a>.</li>
-                            </ul>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -57,10 +65,6 @@
         <div class="container">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h1 id="navbar-title">ThingsHappening.</h1>
-                    <br>
-                    <p>Things are happening! You should know about them. You might even want to join in.</p>
-                    <br>
                     {% block main %}
                     {% endblock %}
                 </div>

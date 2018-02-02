@@ -22,7 +22,9 @@ api_urls = router.urls + [
 
 
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
+    # url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^$', TemplateView.as_view(template_name="tvguide_test.html"), name='index'),
+
     url(r'^auth/', include(auth_urlpatterns, namespace='auth')),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api_urls, namespace='api')),

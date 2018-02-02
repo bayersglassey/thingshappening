@@ -571,10 +571,8 @@ window.TVGuide = (function(){
 
         /* view should be a SimpleView (for now) */
         this.view = view;
-        this.start = view.start;
-        this.duration = view.duration;
-        //this.start = view.get_start();
-        //this.duration = view.get_duration();
+        this.start = view.get_start();
+        this.duration = view.get_duration();
 
         /* We load events within the view's visible area, *plus* a bit of
         extra space to left and right, so that user can scroll a little bit
@@ -591,10 +589,7 @@ window.TVGuide = (function(){
         }
 
         /* Load initial set of events */
-        var buffer_duration = this.get_buffer_duration();
-        this.load_events(
-            moment(this.start - buffer_duration),
-            moment(this.start + this.duration + buffer_duration));
+        this.load_events(view.start, moment(view.start + view.duration));
     }
     SimpleController.prototype = {
         get_buffer_duration: function(){

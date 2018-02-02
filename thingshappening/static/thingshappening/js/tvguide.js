@@ -303,10 +303,10 @@ window.TVGuide = (function(){
         this.duration = duration || days(2);
 
         /* Width of a millisecond in pixels */
-        this.ms_w = ms_w || 1 / seconds(30);
+        this.ms_w = ms_w || 1 / seconds(15);
 
         /* Row height in pixels */
-        this.row_h = row_h || 30;
+        this.row_h = row_h || 50;
 
         /* Create DOM elements */
         this.render();

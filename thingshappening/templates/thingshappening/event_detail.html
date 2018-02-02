@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <style>
+        .th-event-image {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>
+                {{ event.title }}
+                by <a href="{{ user.get_absolute_url }}">@{{ event.user.username }}</a>
+            </h3>
+            <h4>{{ event.start|date:"M j [f a]" }} &mdash; {{ event.end|date:"M j [f a]" }}</h4>
+            {% if event.user == request.user %}
+                <hr>
+                <h4>This is your event!</h4>
+                <ul>
+                    <li><a href="{{ event.get_update_absolute_url }}">Edit</a> this event</a></li>
+                </ul>
+            {% endif %}
+            <hr>
+            <p>{{ event.description }}</p>
+        </div>
+        <div class="col-md-6">
+            {% if event.image_url %}<img class="th-event-image" src="{{ event.image_url }}">{% endif %}
+        </div>
+    </div>
+{% endblock %}

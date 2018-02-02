@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <style>
+    </style>
+    <h3>@{{ user.username }}</h3>
+    {% if event.user == request.user %}
+    <h4>(This is you!)</h4>
+    {% endif %}
+    <hr>
+    <ul>
+        <li>Search for <a href="{{ user.get_events_absolute_url }}">events</a> by this user.</li>
+    </ul>
+{% endblock %}

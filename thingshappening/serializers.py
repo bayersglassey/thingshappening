@@ -39,10 +39,13 @@ class THUserSerializer(serializers.ModelSerializer):
             'date_joined',
             'is_active',
             'events_link',
+            'absolute_url',
         )
 
     events_link = HyperlinkedQueryParamRelatedField(query_param='user',
         view_name='api:event-list')
+
+    absolute_url = serializers.URLField(source='get_absolute_url', read_only=True)
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -57,9 +60,12 @@ class EventSerializer(serializers.ModelSerializer):
             'start',
             'end',
             'image_url',
+            'absolute_url',
         )
 
     user_link = serializers.HyperlinkedRelatedField(source='user',
         read_only=True, view_name='api:thuser-detail')
+
+    absolute_url = serializers.URLField(source='get_absolute_url', read_only=True)
 
 

@@ -49,13 +49,14 @@
                             </h4>
                             <ul>
                                 {% if request.user.is_authenticated %}
-                                    <li>Manage your <a href="{% url "my_events" %}">events</a>.</li>
+                                    <li>Start an <a href="{% url "event-create" %}">event</a>.</li>
+                                    <li>See your <a href="{% url "event-list" %}?user_id={{ request.user.pk }}">existing events</a>.</li>
                                     <li><a href="{% url "auth:logout" %}">Log out</a>.</li>
                                 {% else %}
                                     <li>Ok, I'll <a href="{% url "auth:login" %}">log in</a>, then.</li>
                                     <li>Actually, I need to <a href="{% url "auth:signup" %}">make an account</a>.</li>
                                 {% endif %}
-                                <li><a href="{% url "index" %}">Explore</a> a little.</li>
+                                <li>Play with the widget on the <a href="{% url "index" %}">main page</a>.</li>
                             </ul>
                         </div>
                     </div>

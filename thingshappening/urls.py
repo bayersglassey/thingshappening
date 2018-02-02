@@ -30,6 +30,13 @@ urlpatterns = [
     url(r'^api/', include(api_urls, namespace='api')),
     url(r'^calendar_test/?$', TemplateView.as_view(template_name="calendar_test.html"), name='calendar_test'),
     url(r'^tvguide_test/?$', TemplateView.as_view(template_name="tvguide_test.html"), name='tvguide_test'),
-    url(r'^my_events/?$', views.MyEventsView.as_view(), name='my_events'),
+
+    url(r'^events/?$', views.EventListView.as_view(), name='event-list'),
+    url(r'^events/new/?$', views.EventCreateView.as_view(), name='event-create'),
+    url(r'^events/(?P<pk>[0-9]+)/?$', views.EventDetailView.as_view(), name='event-detail'),
+    url(r'^events/(?P<pk>[0-9]+)/edit/?$', views.EventUpdateView.as_view(), name='event-update'),
+
+    url(r'^users/?$', views.THUserListView.as_view(), name='user-list'),
+    url(r'^users/(?P<pk>[0-9]+)/?$', views.THUserDetailView.as_view(), name='user-detail'),
 ]
 

@@ -1,0 +1,18 @@
+
+Feb 2, 2018
+-----------
+
+When you load the page w/ tvguide widget, it loads some events...
+Then, scroll the tiniest bit: and a few more load!..
+So what's being loaded the first time?..
+
+    start__lte:2018-02-04T09:10:12-08:00
+    end__gte:2018-02-02T09:10:12-08:00
+
+    start__lte:2018-02-02T22:27:42-08:00
+    end__gte:2018-02-02T09:10:12-08:00
+
+The start__lte is different!.. wtf.
+That makes some sense, actually.
+That's the same old issue we've been having with view's width
+being 0 when the object is created.

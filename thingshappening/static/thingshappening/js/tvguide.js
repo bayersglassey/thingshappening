@@ -90,6 +90,7 @@ window.TVGuide = (function(){
             this.start = moment(data.start);
             this.end = moment(data.end);
             this.image_url = data.image_url;
+            this.absolute_url = data.absolute_url;
 
             /* Save the raw data too, just in case... */
             this.data = data;
@@ -526,7 +527,7 @@ window.TVGuide = (function(){
                         event.veil_elem = event_veil_elem;
 
                         /* Create element for event title */
-                        event_title_elem = document.createElement('span');
+                        event_title_elem = document.createElement('a');
                         event_title_elem.setAttribute('class', 'tvguide-simpleview-event-title');
                         event_elem.appendChild(event_title_elem);
                         event.title_elem = event_title_elem;
@@ -553,6 +554,7 @@ window.TVGuide = (function(){
                     if(event.id !== null)title += event.id + ': ';
                     title += event.title;
                     event_title_elem.textContent = title;
+                    event_title_elem.href = event.absolute_url || "#";
                 }
             }
         }

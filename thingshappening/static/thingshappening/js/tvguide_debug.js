@@ -22,16 +22,16 @@ $(document).ready(function(){
     var tvguide = new TVGuide();
     var view = tvguide.get_simple_view();
     var controller = new TVGuide.SimpleController(view);
-    controller.active = false;
-    ms_w_inpt.value = view.ms_w;
-    row_h_inpt.value = view.row_h;
 
     /* Attach datemarker and view element */
     main.before(view.render_datemarker());
     main.append(view.get_elem());
 
-    /* Add some events */
-    create_random_events(50, false);
+    /* Widgets' initial state */
+    ms_w_inpt.value = view.ms_w;
+    row_h_inpt.value = view.row_h;
+    load_on_scroll_check.checked = controller.active;
+    debug_scroll_check.checked = controller.DEBUG_SCROLL;
 
 
     /********************

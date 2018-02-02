@@ -444,11 +444,17 @@ window.TVGuide = (function(){
             /* Create inner element */
             var view_elem = document.createElement('div');
             view_elem.setAttribute('class', 'tvguide-simpleview');
+            /* "\xa0" is unicode literal for "&nbsp;". We add one so the
+            element doesn't collapse before we populate it with rows */
+            view_elem.textContent = "\xa0";
             view_container_elem.append(view_elem);
 
             /* Store elements */
             this.view_container_elem = view_container_elem;
             this.view_elem = view_elem;
+
+            /* Initialize width etc (even if we have no rows to render) */
+            this.update();
         },
         update: function(){
             /* Re-renders data */
@@ -565,8 +571,10 @@ window.TVGuide = (function(){
 
         /* view should be a SimpleView (for now) */
         this.view = view;
-        this.start = view.get_start();
-        this.duration = view.get_duration();
+        this.start = view.start;
+        this.duration = view.duration;
+        //this.start = view.get_start();
+        //this.duration = view.get_duration();
 
         /* We load events within the view's visible area, *plus* a bit of
         extra space to left and right, so that user can scroll a little bit
@@ -581,6 +589,12 @@ window.TVGuide = (function(){
         view.get_elem().onscroll = function(event){
             controller.onscroll();
         }
+
+        /* Load initial set of events */
+        var buffer_duration = this.get_buffer_duration();
+        this.load_events(
+            moment(this.start - buffer_duration),
+            moment(this.start + this.duration + buffer_duration));
     }
     SimpleController.prototype = {
         get_buffer_duration: function(){
@@ -611,8 +625,8 @@ window.TVGuide = (function(){
                 loaded_new_events = true;
 
                 this.view.tvguide.crop(
-                    new_start - buffer_duration,
-                    new_end + buffer_duration);
+                    moment(new_start - buffer_duration),
+                    moment(new_end + buffer_duration));
 
                 if(start_diff < 0){
                     /* Add events to start */

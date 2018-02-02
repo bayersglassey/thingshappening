@@ -2,6 +2,7 @@
 from random import randint
 from datetime import datetime, timedelta
 
+from django.db.models import Q
 from django.utils import timezone
 from django.conf import settings
 
@@ -203,7 +204,7 @@ def create_random_events(n=1, start=None, duration=None, event_duration_min=None
     if start is None:
         start = timezone.now()
     if duration is None:
-        duration = timedelta(days=1)
+        duration = timedelta(days=7)
     if event_duration_min is None:
         event_duration_min = timedelta(minutes=15)
     if event_duration_max is None:
@@ -233,3 +234,17 @@ def create_random_events(n=1, start=None, duration=None, event_duration_min=None
         )
         events.append(event)
     return events
+
+def crop_events(start=None, end=None):
+    # Removes events *outside* of start/end
+
+    filter = Q()
+    if start:
+        filter |= Q(end__lt=start)
+    if end:
+        filter |= Q(start__gt=end)
+
+    return Event.objects.filter(filter).delete()
+
+def crop_old_events():
+    return crop_events(start=timezone.now())

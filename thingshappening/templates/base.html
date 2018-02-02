@@ -31,20 +31,25 @@
                             <h4>Nav</h4>
                             <ul>
                                 <li>Go <a href="{% url "index" %}">home</a>.</li>
-                                <li><a href="{% url "auth:login" %}">Log in</a>.</li>
                                 <li>Test the <a href="{% url "calendar_test" %}">calendar widget</a>.</li>
                                 <li>Test the <a href="{% url "tvguide_test" %}">TV guide widget</a>.</li>
                             </ul>
                         </div>
-                        {% if request.user.is_authenticated %}
                         <div class="th-nav">
-                            <h4>Logged in</h4>
+                            {% if request.user.is_authenticated %}
+                            <h4>Hello <strong>{{ request.user.username }}</strong>!</h4>
                             <ul>
                                 <li>Manage your <a href="{% url "my_events" %}">events</a>.</li>
                                 <li><a href="{% url "auth:logout" %}">Log out</a>.</li>
                             </ul>
+                            {% else %}
+                            <h4>Not logged in.</h4>
+                            <ul>
+                                <li>Ok, I'll <a href="{% url "auth:login" %}">log in</a>, then.</li>
+                                <li>Actually, I need to <a href="{% url "auth:signup" %}">make an account</a>.</li>
+                            </ul>
+                            {% endif %}
                         </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>

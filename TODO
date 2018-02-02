@@ -16,3 +16,7 @@ The start__lte is different!.. wtf.
 That makes some sense, actually.
 That's the same old issue we've been having with view's width
 being 0 when the object is created.
+
+
+Also: seeing your list of events should be possible as a TVGuide.
+

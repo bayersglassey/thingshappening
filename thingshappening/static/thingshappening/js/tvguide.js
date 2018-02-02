@@ -610,8 +610,9 @@ window.TVGuide = (function(){
             )){
                 loaded_new_events = true;
 
-                this.view.tvguide.crop(this.view.get_start(),
-                    this.view.get_end());
+                this.view.tvguide.crop(
+                    new_start - buffer_duration,
+                    new_end + buffer_duration);
 
                 if(start_diff < 0){
                     /* Add events to start */

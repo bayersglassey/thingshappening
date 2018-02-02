@@ -1,6 +1,8 @@
 
 window.TVGuide = (function(){
 
+    var EVENTS_EXPAND_ON_MOUSEOVER = false;
+
 
     /*********************
      * UTILITY FUNCTIONS *
@@ -492,14 +494,16 @@ window.TVGuide = (function(){
 
                 /* Update row height, and event listeners which use it */
                 row_elem.style.height = as_px(row_h);
-                (function(row_elem){
-                    row_elem.onmouseover = function(event){
-                        row_elem.style.height = as_px(row_h + 30);
-                    }
-                    row_elem.onmouseout = function(event){
-                        row_elem.style.height = as_px(row_h);
-                    }
-                })(row_elem);
+                if(EVENTS_EXPAND_ON_MOUSEOVER){
+                    (function(row_elem){
+                        row_elem.onmouseover = function(event){
+                            row_elem.style.height = as_px(row_h + 30);
+                        }
+                        row_elem.onmouseout = function(event){
+                            row_elem.style.height = as_px(row_h);
+                        }
+                    })(row_elem);
+                }
 
                 /* Loop over row's events */
                 var events = row.events;

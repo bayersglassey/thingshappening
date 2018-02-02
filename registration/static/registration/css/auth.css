@@ -1,0 +1,9 @@
+
+.helptext {
+    display: block;
+    font-style: italic;
+}
+
+ul.errorlist>li {
+    color: #d22;
+}

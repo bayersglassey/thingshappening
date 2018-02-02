@@ -581,7 +581,7 @@ window.TVGuide = (function(){
         duration.
         The buffer ratio defines the buffer duration as a percentage of the
         view's duration. */
-        this.buffer_ratio = buffer_ratio === undefined? 1/4: buffer_ratio;
+        this.buffer_ratio = buffer_ratio === undefined? 3/4: buffer_ratio;
 
         var controller = this;
         view.get_elem().onscroll = function(event){

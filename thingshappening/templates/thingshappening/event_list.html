@@ -1,12 +1,31 @@
 {% extends "base.html" %}
 
 {% block main %}
+    <style>
+        .th-event-image {
+            background-color: #ddd;
+            background-size: cover;
+            height: 4em;
+        }
+    </style>
+
     <h4>Events</h4>
-    <ul>
-        {% for event in events %}
-        <li>
-            <a href="{{ event.get_absolute_url }}">{{ event }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+    {% for event in events %}
+    <div class="th-event">
+        <hr>
+        <div class="row">
+            <div class="col-sm-4">
+                <a href="{{ event.get_absolute_url }}">{{ event.title }}</a>
+                {{ event.start|date }} &mdash; {{ event.end|date }}
+                <br>
+                by <a href="{{ event.user.get_absolute_url }}">@{{ event.user.username }}</a>
+            </div>
+            <div class="col-sm-8">
+                <div class="th-event-image" style="{% if event.image_url %}background-image: url('{{ event.image_url }}');{% endif %}">
+                    {{ event.description }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 {% endblock %}

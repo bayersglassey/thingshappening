@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from django.utils import timezone
@@ -29,7 +30,7 @@ def default_end():
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     user = models.ForeignKey('thingshappening.thuser')
     start = models.DateTimeField(default=default_start)
     end = models.DateTimeField(default=default_end)
@@ -37,6 +38,11 @@ class Event(models.Model):
     def __str__(self):
         return "{} ({} - {})".format(self.title,
             fmt_datetime(self.start), fmt_datetime(self.end))
+
+    def clean(self):
+        if self.start > self.end:
+            raise ValidationError("Event's start needs to come "
+                "before its end!")
 
     def get_absolute_url(self):
         return reverse('event-detail', kwargs={'pk': self.pk})

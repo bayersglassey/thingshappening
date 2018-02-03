@@ -22,7 +22,10 @@
                 </ul>
             {% endif %}
             <hr>
-            <p>{{ event.description }}</p>
+            <p>
+                <strong>Event details:</strong>
+                {{ event.description }}
+            </p>
         </div>
         <div class="col-md-6">
             {% if event.image_url %}<img class="th-event-image" src="{{ event.image_url }}">{% endif %}

@@ -20,6 +20,7 @@
 
 .tvguide-simpleview-event {
     position: absolute;
+    display: block;
 
     overflow: hidden;
     white-space: nowrap;

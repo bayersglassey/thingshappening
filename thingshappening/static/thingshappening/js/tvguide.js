@@ -519,7 +519,7 @@ window.TVGuide = (function(){
                     var event_elem = event.elem;
                     var event_veil_elem, event_title_elem;
                     if(!event_elem){
-                        var event_elem = document.createElement('div');
+                        var event_elem = document.createElement('a');
                         event_elem.setAttribute('class', 'tvguide-simpleview-event');
                         event_elem.style.top = as_px(0);
                         event.elem = event_elem;
@@ -531,7 +531,7 @@ window.TVGuide = (function(){
                         event.veil_elem = event_veil_elem;
 
                         /* Create element for event title */
-                        event_title_elem = document.createElement('a');
+                        event_title_elem = document.createElement('span');
                         event_title_elem.setAttribute('class', 'tvguide-simpleview-event-title');
                         event_elem.appendChild(event_title_elem);
                         event.title_elem = event_title_elem;
@@ -553,12 +553,12 @@ window.TVGuide = (function(){
                         event_elem.style.backgroundImage = '';
                     }
 
+                    /* Update link */
+                    event_elem.href = event.absolute_url || "#";
+
                     /* Update title */
-                    var title = "";
-                    if(event.id !== null)title += event.id + ': ';
-                    title += event.title;
+                    var title = event.title;
                     event_title_elem.textContent = title;
-                    event_title_elem.href = event.absolute_url || "#";
                 }
             }
         }

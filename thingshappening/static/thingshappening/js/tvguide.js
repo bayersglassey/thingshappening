@@ -607,6 +607,8 @@ window.TVGuide = (function(){
     SimpleController = function(view, buffer_ratio){
         this.active = true;
 
+        this.filter_by_user = null;
+
         this.n_api_calls = 0;
         this.n_successful_api_calls = 0;
 
@@ -706,10 +708,20 @@ window.TVGuide = (function(){
                 end__gte: start.format()
             };
 
+            if(this.filter_by_user !== null){
+                query.user = this.filter_by_user;
+            }
+
             var view = this.view;
             th_api.events.get_all(query).then(function(data){
                 this.n_successful_api_calls++;
                 var events_data = data.results;
+                if(events_data.length !== data.count){
+                    console.log("Warning: Only loaded first page of events. ("
+                        + String(events_data.length) + "/" + String(data.count)
+                        + ")", data
+                    );
+                }
                 view.tvguide.add_events(events_data);
                 view.update();
             });

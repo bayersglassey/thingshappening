@@ -15,6 +15,7 @@ $(document).ready(function(){
     var api_load_btn = document.getElementById('api_load_btn');
     var load_on_scroll_check = document.getElementById('load_on_scroll_check');
     var debug_scroll_check = document.getElementById('debug_scroll_check');
+    var filter_by_user_inpt = document.getElementById('filter_by_user_inpt');
 
     var debug_widgets_visible = false;
 
@@ -32,6 +33,23 @@ $(document).ready(function(){
     row_h_inpt.value = view.row_h;
     load_on_scroll_check.checked = controller.active;
     debug_scroll_check.checked = controller.DEBUG_SCROLL;
+    filter_by_user_inpt.value =
+        render_int_or_null(controller.filter_by_user);
+
+
+    /*************
+     * Utilities *
+     *************/
+
+    function render_int_or_null(x){
+        if(x === null)return "";
+        return String(x|0);
+    }
+
+    function parse_int_or_null(x){
+        if(x === "")return null;
+        return x|0;
+    }
 
 
     /********************
@@ -55,10 +73,18 @@ $(document).ready(function(){
         var start = view.get_start();
         var duration = view.get_duration();
         var end = moment(start + duration);
+
         var query = {
             start__lte: end.format(),
             end__gte: start.format()
         };
+
+        var filter_by_user =
+            parse_int_or_null(filter_by_user_inpt.value);
+        if(filter_by_user !== null){
+            query.user = filter_by_user;
+        }
+
         th_api.events.get_all(query).then(function(data){
             var events_data = data.results;
             tvguide.add_events(events_data);
@@ -127,6 +153,10 @@ $(document).ready(function(){
     }
     debug_scroll_check.onclick = function(event){
         controller.DEBUG_SCROLL = debug_scroll_check.checked;
+    }
+    filter_by_user_inpt.onchange = function(event){
+        controller.filter_by_user =
+            parse_int_or_null(filter_by_user_inpt.value);
     }
 
 });

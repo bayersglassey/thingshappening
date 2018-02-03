@@ -3,8 +3,10 @@
 {% block js %}
 {{ block.super }}
 <script>
-    $('#id_start').datepicker();
-    $('#id_end').datepicker();
+    $('#id_start, #id_end').datetimepicker({
+        dateFormat: 'yy-mm-dd',
+        timeFormat: 'HH:mm:ss'
+    });
 </script>
 {% endblock %}
 

@@ -1,0 +1,24 @@
+#! /bin/sh
+
+if [ -z "$1" ]; then
+    echo 'Usage:'
+    echo '    $0 IP'
+    exit 0
+fi
+
+IP="$1"
+shift
+
+ssh th@$IP '
+    cd thingshappening
+    git pull
+    ./env/bin/pip install -r requirements.txt
+    ./env/bin/python manage.py migrate
+    ./env/bin/python manage.py collectstatic --no-input
+'
+
+ssh $IP '
+    echo "Restarting uwsgi..."
+    sudo systemctl restart uwsgi
+    sudo systemctl status uwsgi
+'

@@ -1,0 +1,16 @@
+#! /bin/sh
+
+if [ -z "$1" ]; then
+    echo 'Usage:'
+    echo '    $0 IP'
+    exit 0
+fi
+
+IP="$1"
+N="$2"
+shift 2
+
+ssh th@$IP '
+    cd thingshappening
+    ./env/bin/python manage.py shell -c "from thingshappening.utils import *; print(create_random_events('"$N"'))"
+'

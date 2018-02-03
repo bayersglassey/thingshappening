@@ -18,6 +18,10 @@
     position: relative;
 }
 
+.tvguide-simpleview-timemarker {
+    position: absolute;
+}
+
 .tvguide-simpleview-event {
     position: absolute;
     display: block;

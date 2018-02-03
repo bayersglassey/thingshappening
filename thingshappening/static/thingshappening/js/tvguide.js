@@ -456,8 +456,40 @@ window.TVGuide = (function(){
             this.view_container_elem = view_container_elem;
             this.view_elem = view_elem;
 
+            /* Create time markers */
+            var N_TIME_MARKERS = 10;
+            this.time_markers = new Array(N_TIME_MARKERS);
+            for(var i = 0; i < N_TIME_MARKERS; i++){
+                /* Calculate time to be marked */
+                var start = moment(this.start + minutes(30) * i);
+
+                /* Create marker's DOM element */
+                var elem = document.createElement('span');
+                elem.className = 'tvguide-simpleview-timemarker';
+                elem.textContent = start.format('h:mm a');
+                view_elem.appendChild(elem);
+
+                /* Create marker & put in array */
+                var marker = {
+                    start: start,
+                    elem: elem
+                };
+                this.time_markers[i] = marker;
+            }
+
             /* Initialize width etc (even if we have no rows to render) */
             this.update();
+        },
+        update_time_markers: function(){
+            var markers = this.time_markers;
+            var n_markers = markers.length;
+            for(var i = 0; i < n_markers; i++){
+                var marker = markers[i];
+                var start = marker.start;
+                var elem = marker.elem;
+                var x = this.moment_to_px(start);
+                elem.style.left = as_px(x);
+            }
         },
         update: function(){
             /* Re-renders data */
@@ -473,6 +505,9 @@ window.TVGuide = (function(){
 
             var rows = tvguide.rows;
             var n_rows = rows.length;
+
+            /* Update time markers */
+            this.update_time_markers();
 
             /* Update view width */
             view_elem.style.width = as_px(this.duration_to_px(duration));

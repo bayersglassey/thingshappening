@@ -6,7 +6,8 @@ from .models import THUser, Event
 from .serializers import THUserSerializer, EventSerializer
 
 class THPagination(pagination.PageNumberPagination):
-    page_size = 100
+    # For debugging purposes!..
+    page_size = 500
 
 class THViewSetMixin:
     pagination_class = THPagination

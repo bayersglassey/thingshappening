@@ -4,11 +4,9 @@
     <style>
     </style>
     <h3>@{{ user.username }}</h3>
+    <h4>({{ user.email }})</h4>
     {% if event.user == request.user %}
     <h4>(This is you!)</h4>
     {% endif %}
-    <hr>
-    <ul>
-        <li>Search for <a href="{{ user.get_events_absolute_url }}">events</a> by this user.</li>
-    </ul>
+    <p>See this user's <a href="{{ user.get_events_absolute_url }}">events</a>.</p>
 {% endblock %}

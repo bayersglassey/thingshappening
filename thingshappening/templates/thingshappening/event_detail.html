@@ -11,7 +11,7 @@
         <div class="col-md-6">
             <h3>
                 {{ event.title }}
-                by <a href="{{ user.get_absolute_url }}">@{{ event.user.username }}</a>
+                by <a href="{{ event.user.get_absolute_url }}">@{{ event.user.username }}</a>
             </h3>
             <h4>{{ event.start|date:"M j [f a]" }} &mdash; {{ event.end|date:"M j [f a]" }}</h4>
             {% if event.user == request.user %}

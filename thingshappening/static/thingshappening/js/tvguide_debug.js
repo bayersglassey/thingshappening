@@ -24,7 +24,7 @@ $(document).ready(function(){
     var controller = new TVGuide.SimpleController(view);
 
     /* Attach datemarker and view element */
-    main.parentNode.insertBefore(view.render_datemarker(), main);
+    debug_widgets.insertBefore(view.render_datemarker(), debug_widgets.firstChild);
     main.appendChild(view.get_elem());
 
     /* Widgets' initial state */

@@ -1,4 +1,11 @@
 
+Feb 3
+-----
+
+Add validation to Event: start should come before end.
+
+
+
 Feb 2, 2018
 -----------
 

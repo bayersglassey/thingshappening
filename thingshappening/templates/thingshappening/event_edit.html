@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block js %}
+{{ block.super }}
+<script>
+    $('#id_start').datepicker();
+    $('#id_end').datepicker();
+</script>
+{% endblock %}
+
 {% block main %}
     <form method="post" action="">
         {% csrf_token %}

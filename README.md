@@ -23,6 +23,17 @@ If you do get it running, you may want to have a look at
 to populate the database with stuff so you can play with the TV Guide widget.
 
 
+## Screenshots
+
+### "TV Guide" Widget
+
+![](/screenshot1.png)
+
+### An Event
+
+![](/screenshot2.png)
+
+
 ## TVGuide widget
 
 See the [Javascript source](thingshappening/static/thingshappening/js/tvguide.js).
@@ -45,5 +56,6 @@ Knows how to create & update a DOM element representing the widget.
 
 Allows user to control a SimpleView by scrolling the DOM element.
 Also controls loading of new events via REST API calls.
-Uses [a tiny JS library for accessing this project's API](thingshappening/static/thingshappening/js/th_api.js).
+Uses [a tiny JS library for accessing this project's API](thingshappening/static/thingshappening/js/th_api.js),
+using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 
